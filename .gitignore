@@ -41,3 +41,4 @@ microblog.log*
 
 .env
 test.py
+test*.py

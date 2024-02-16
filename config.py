@@ -22,7 +22,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or ''
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or ''
     
-    ADMINS = ['support@parser24.online']
+    ADMINS = [os.environ.get('ADMIN_EMAIL')]
        
     # количество элементов на странице
     USERS_PER_PAGE = 10

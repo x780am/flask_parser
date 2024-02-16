@@ -1,0 +1,14 @@
+
+<table class="table table-striped " >   
+    <tr>
+        <td>  
+            {{ user.id }}
+        </td>
+        <td>
+            <a href="{{ url_for('main.user', username=user.login) }}">
+                {{ user.login }}
+            </a>            
+        </td>
+    </tr>
+   
+</table>

@@ -76,12 +76,12 @@ from app.email import send_email
 @bp.route('/send_mail', methods=['GET'])
 def send_mail():
     
-    current_app.logger.critical('Test critical message in logger')
+    current_app.logger.critical('Тест critical сообщения от модуля logger')
     
-    send_email('Test email send',
+    send_email('Тестовое сообщение от модуля send_email',
                sender="support@parser24.online",
                recipients=["support@parser24.online"],
                text_body='text body', 
                html_body='<h1>HTML body</h1>')
     
-    return 'Send 2 message om admin email'
+    return 'Отправили 2 сообщения на почту админа, проверь'

@@ -76,7 +76,7 @@ from app.email import send_email
 @bp.route('/send_mail', methods=['GET'])
 def send_mail():
     
-    # current_app.logger.critical('Test critical message in logger')
+    current_app.logger.critical('Test critical message in logger')
     
     send_email('Test email send',
                sender="support@parser24.online",

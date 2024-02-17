@@ -32,8 +32,8 @@ def create_app(config_class=Config):
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
 
-    if not app.debug and not app.testing:
-    # if 1==1:
+    # if not app.debug and not app.testing:
+    if 1==1:
         if app.config['MAIL_SERVER']:
             # отправка писем админам
             auth = None
@@ -41,19 +41,18 @@ def create_app(config_class=Config):
                 auth = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
             
             mail_handler = SMTPHandler(mailhost=app.config['MAIL_SERVER'], 
-                                    fromaddr='support@parser24.online', # от кого
-                                    toaddrs=app.config['ADMINS'], # кому
-                                    subject='Microblog Ошибки', # Заголовок 
+                                    fromaddr=app.config['ADMIN'], # от кого
+                                    toaddrs=app.config['ADMIN'], # кому
+                                    subject='Flask_parser Ошибки', # Заголовок 
                                     credentials=auth, 
                                     secure=())
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
-            # smtp.quit()
             
         # логирование в файл
         if not os.path.exists('logs'):
             os.mkdir('logs')
-        file_handler = RotatingFileHandler('logs/microblog.log', maxBytes=10240,
+        file_handler = RotatingFileHandler('logs/flask_parser.log', maxBytes=10240,
                                         backupCount=10)
         file_handler.setFormatter(logging.Formatter(
             '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
@@ -61,7 +60,7 @@ def create_app(config_class=Config):
         app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Microblog startup')
+        app.logger.info('Flask_parser startup')
 
     return app
 

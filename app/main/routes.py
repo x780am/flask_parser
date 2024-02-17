@@ -71,17 +71,17 @@ def all_users():
     else:
         return render_template('all_users.html', users=None, next_url=None, prev_url=None)
 
-
-# from app import mail    
-# from flask_mail import Message
-# @bp.route('/send_mail', methods=['GET'])
-# def send_mail():
     
-#     current_app.logger.error('Microblog startup')
-#     # msg = Message("Hello",
-#     #     sender="support@parser24.online",
-#     #     recipients=["info@avito-parser.ru"])
-#     # msg.body = 'text body'
-#     # msg.html = '<h1>HTML body</h1>'
-#     # mail.send(msg)
-#     return 'ok'
+from app.email import send_email
+@bp.route('/send_mail', methods=['GET'])
+def send_mail():
+    
+    # current_app.logger.critical('Test critical message in logger')
+    
+    send_email('Test email send',
+               sender="support@parser24.online",
+               recipients=["support@parser24.online"],
+               text_body='text body', 
+               html_body='<h1>HTML body</h1>')
+    
+    return 'Send 2 message om admin email'

@@ -27,10 +27,20 @@ def create_app(config_class=Config):
     app.register_blueprint(errors_bp)
 
     from app.auth import bp as auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/auth')
+    # app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(auth_bp)
     
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+    
+    from app.admin import bp as admin_bp
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+    
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
+    
+    from app.lk import bp as lk_bp
+    app.register_blueprint(lk_bp, url_prefix='/lk')
 
     # if not app.debug and not app.testing:
     if 1==1:
@@ -65,4 +75,4 @@ def create_app(config_class=Config):
     return app
 
 
-from app import models
+from app.auth import models

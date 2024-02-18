@@ -4,7 +4,7 @@
     <h1> Пользователи </h1>
     {% if users %}
         {% for user in users %}
-        {% include '_user.html' %}
+        {% include 'admin/_user.html' %}
         {% endfor %}
         <hr>
         <nav aria-label="Post navigation">
@@ -22,7 +22,7 @@
             </ul>
         </nav>
     {% else %}
-    <p> Ошибка загрузки данных <a href="{{url_for('main.all_users')}}"> Назад </a></p>
+    <p> Ошибка загрузки данных <a href="{{url_for('admin.all_users')}}"> Назад </a></p>
     {% endif %}   
 
     

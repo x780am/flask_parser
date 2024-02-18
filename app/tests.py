@@ -4,7 +4,7 @@ import os
 from datetime import datetime, timezone, timedelta
 import unittest
 from app import app
-from app.models import User #, Post
+from app.auth.models import User #, Post
 
 
 class UserModelCase(unittest.TestCase):

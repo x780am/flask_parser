@@ -1,9 +1,489 @@
 {% extends "base.html" %}
 
+{% block content_head %}
+
+{% endblock %}
+
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    <img src="{{ url_for('main.static', filename='img/admin.jpg') }}" />
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+<section id = "header">
+    <div class="section-table">
+        <div class="section-row">
+           <div class="section-cell">
+                <div class="section-center">
+                    <h1>
+                         Онлайн Парсер <br>Объявлений <br>АВИТО
+                    </h1>
+                    <p class='cat_name' id ='cat_name'>
+                        Недвижимость
+                    </p>
+                    <div class="section-btn">
+                        <a href='#block_free' class="btn btn-primary ankor">Попробовать бесплатно <i class="fa fa-chevron-circle-right"></i></a>
+                        <a href='/parser' class="btn btn-info">Платная версия <i class="far fa-money-bill-alt"></i></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-row">
+            <div class="section-cell" id = 'mini_menu'>              
+
+                <span class ='meny'><a class="ankor" href='#block_preim'>Преимущества</a></span>
+                <span class ='meny'><a class="ankor" href='#block_polya'>Что Вы получите</a></span>
+                <span class ='meny'><a class="ankor" href='#block_work'>Как мы работаем</a></span>
+                <div class="row">
+                  <div class="col-md-12 d-none d-sm-block">
+                      <br><center><span class ='meny '><a class="ankor" href='#block_preim'><i class="fas fa-angle-double-down fa-2x"></i></a></span></center>
+                  </div>
+                  </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section id = "block_preim">
+    <div class="container">
+        <div class="row preim-head text-center">
+            <div class="col">
+                <h2>
+                    Почему с нами выгодно работать
+                </h2>
+                <p>Больше никаких программ, прокси и долгих настроек, собирай данные с досок объявлений онлайн прямо с телефона. </p>
+            </div>
+        </div>
+        <div class="row preim text-center">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="item">
+                    <div class="hex-icon__shape">
+                        <i class="hex-icon__icon far fa-clock" aria-hidden="true"></i>
+                    </div>
+                    <p class="sub_p">Работаем </p>
+                    <p class="color_p">24 часа </p>
+                    <p class="sub_p">в сутки</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="item">
+                    <div class="hex-icon__shape">
+                        <i class="hex-icon__icon fa  fa-download" aria-hidden="true"></i>
+                    </div>
+                    <p class="sub_p">За 5 мин</p>
+                    <p class="color_p">1 000</p>
+                    <p class="sub_p">объявлений</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="item">
+                    <div class="hex-icon__shape">
+                        <i class="hex-icon__icon fas fa-ruble-sign"></i>
+                    </div>
+                    <p class="sub_p">Цена</p>
+                    <p class="color_p"> коп.</p>
+                    <p class="sub_p">за объявление</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="item">
+                    <div class="hex-icon__shape">
+                        <i class="hex-icon__icon far fa-thumbs-up" aria-hidden="true"></i>
+                    </div>
+                    <p class="sub_p">Заказ</p>
+                    <p class="sub_p">от</p>
+                    <p class="color_p"> 0 руб.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id = "block_polya">
+    <div class="container">
+        <div class="row free-polya text-center">
+            <div class="col">
+                <h2>
+                    Список полей для выгрузки
+                </h2>
+            </div>
+        </div>
+        <div class="row polya ">
+            <div class="col-md-6">
+
+                <ul class="list-unstyled">
+
+                    <!--li>
+                        <i class="fa fa-check-circle"></i>  Телефон объявления
+                    </li-->
+                    <li>
+                        <i class="fa fa-check-circle"></i> Продавец
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Заголовок объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Описание объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Цена объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Город, район, метро, адрес
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Категория, подкатегория объявления
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="fa fa-check-circle"></i> Ссылка на объявление
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Дата добавления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Кол-во просмотров
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Номер объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Ссылки на изображения
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Координаты объявления
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row free-polya text-center">
+            <div class="col">
+                <h5>
+                    Дополнительные поля
+                </h5>
+            </div>
+        </div>
+        <div class="row polya ">
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                  <li>
+                        <i class="fa fa-check-circle"></i> Количество активных/завершенных, кол-во доставок, возможность написать сообщение, дата регистрации, рейтинг, кол-во отзывов продавца
+                    </li>
+                    <!--li>
+                        <i class="fa fa-check-circle"></i> Защищенный номер (Да/Нет)
+                        <a class="underline" href="/helper?act=help-anonym" target="_blank"><img src="/img/help/help-icon.png" width="16" height="16" alt="Что это?"></a>
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Оператор связи, регион оператора
+                    </li-->
+
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="fa fa-check-circle"></i> Комиссия,% (Аренда)
+                    </li>
+                     <li>
+                        <i class="fa fa-check-circle"></i> Платные услуги объявления, доставка, снижение цены
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row free-polya text-center">
+            <div class="col">
+                <h5>
+                    Специальные возможности
+                </h5>
+            </div>
+        </div>
+        <div class="row polya ">
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="fa fa-check-circle"></i> Сохранять html разметку в описании
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Разбить параметры объявления по столбцам
+                        <a class="underline" href="/helper?act=help-param-in-col" target="_blank"><img src="{{ url_for('main.static', filename='/img/help/help-icon.png') }}" width="16" height="16" alt="Что это?"></a>
+                    </li>
+                    <!--li>
+                        <i class="fa fa-check-circle"></i> Собирать телефоны из платной категории Резюме
+                        <a class="underline" href="/helper?act=help-rezume" target="_blank"><img src="/img/help/help-icon.png" width="16" height="16" alt="Что это?"></a>
+                    </li--><li>
+                        <i class="fa fa-check-circle"></i> Парсить объявления продавца
+
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+
+                    <!--li>
+                        <i class="fa fa-check-circle"></i> Не выгружать "защищенные" номера
+                        <a class="underline" href="/helper?act=help-anonym" target="_blank"><img src="/img/help/help-icon.png" width="16" height="16" alt="Что это?"></a>
+                    </li-->
+
+                    <li>
+                        <i class="fa fa-check-circle"></i> Платить только за уникальные объявления
+                        <a class="underline" href="/helper?act=help-dubli_phone" target="_blank"><img src="{{ url_for('main.static', filename='/img/help/help-icon.png') }}" width="16" height="16" alt="Что это?"></a>
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Скачивать только новые объявления
+                        <a class="underline" href="/helper?act=help-only-new" target="_blank"><img src="{{ url_for('main.static', filename='/img/help/help-icon.png') }}" width="16" height="16" alt="Что это?"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row polya-footer text-center">
+            <div class="container">
+                <div class="col">
+                    <img class="img-responsive" src="{{ url_for('main.static', filename='/img/avito-example.jpg') }}" alt ='парсер объявлений' title="Пример парсинга данных" style="width: 100%">
+                    <div class="section-btn">
+                        <a href="{{ url_for('main.static', filename='/files/avito-example.xlsx') }}"  rel="nofollow" class="btn btn-primary">Скачать пример файла xlsx <i class="fa fa-chevron-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id = "block_work">
+    <div class="container">
+        <div class="row work-head text-center">
+            <div class="col">
+                <h2 >
+                    Как мы работаем
+                </h2>
+            </div>
+        </div>
+        <div class="row work text-center">
+            <div class="col-md-3  col-6">
+                <div class="icobox">
+                    <div class="icobox__icon-holder text-center">
+                        <div class="icobox__icon">01</div>
+                    </div>
+                    <div class="icobox__body">
+                        <h5 class="icobox__title">Выбор</h5>
+                        <p>Выберите на сайте доски объявлений нужную категорию и фильтры</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="icobox">
+                    <div class="icobox__icon-holder">
+                        <div class="icobox__icon">02</div>
+                    </div>
+                    <div class="icobox__body">
+                        <h5 class="icobox__title">Загрузка</h5>
+                        <p>Вставьте ссылку с доски объявлений в парсер на сайте</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="icobox">
+                    <div class="icobox__icon-holder">
+                        <div class="icobox__icon">03</div>
+                    </div>
+                    <div class="icobox__body">
+                        <h5 class="icobox__title">Оплата</h5>
+                        <p>Оплатите рассчитанную стоимость</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="icobox">
+                    <div class="icobox__icon-holder">
+                        <div class="icobox__icon">04</div>
+                    </div>
+                    <div class="icobox__body">
+                        <h5 class="icobox__title">Готово</h5>
+                        <p>Получите ссылку на собранные данные</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row work-footer text-center">
+            <div class="col">
+                <div class="section-btn">
+                    <a href='/parser' class="btn btn-info">Платная версия  <i class="far fa-money-bill-alt"></i></a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row col"  >
+            <p>Мы не используем готовые базы данных. Вся информация собирается напрямую с сайта доски объявлений.</p>
+        </div>
+    </div>
+</section>
+
+
+<section id = "block_faq">
+    <div class="container">
+        <div class="row work-head text-center">
+            <div class="col">
+                <h2>Часто задаваемые вопросы</h2>
+            </div>
+        </div>
+
+        <div class="row faq">
+            <div class="col">
+                <div id="accordion" role="tablist">
+                    <div class="card">
+                        <div class="card-header" role="tab" id="heading1">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" href="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                    Как быстро я смогу получить свой заказ?
+                                </a>
+                            </h5>
+                        </div>
+
+                        <div id="collapse1" class="collapse" role="tabpanel" aria-labelledby="heading1" data-parent="#accordion">
+                            <div class="card-body">
+                                После оплаты заказа начнется парсинг данных с доски объявлений. В среднем скорость парсинга данных 10 000 объявлений за 30 мин. Вы получите ссылку и сможете увидеть ход работы. По окончанию Вам будет предоставлена ссылка на файлы. Файлы представлены в двух форматах CSV и XLSX, их можно открыть программой Excel. Сайт работает круглосуточно. </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" role="tab" id="heading2">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" href="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                    В каком виде будут скачанные данные? Можно ли будет фильтровать?
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapse2" class="collapse" role="tabpanel" aria-labelledby="heading2" data-parent="#accordion">
+                            <div class="card-body">
+                                Файлы представлены в двух форматах CSV и XLSX, их можно открыть программой Excel и при желании отфильтровать.
+                                <br><br>Иструкция для Microsoft Office Excel 2007 и новее
+                                <br>1. Выделите диапазон ячеек или всю таблицу
+                                <br>2. На вкладке "Данные" в группе "Работа с данными" нажмите кнопку "Удалить дубликаты"
+                                <br>3. Оставьте галочку на том столбце, из которого хотите удалить повторяющиеся значения и нажмите OK
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="heading3">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" href="#collapse3" aria-expanded="true" aria-controls="collapse3">
+                                    Как оплатить заказ?
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapse3" class="collapse" role="tabpanel" aria-labelledby="heading3" data-parent="#accordion">
+                            <div class="card-body">
+                                Оплатить заказ парсинга можно через Yandex Money, QIWI, карты Visa и MasterCard.
+                                Форма для оплаты появится после формирования заказа в <a href='/parser<?php echo $utm_hvost;?>'>платной версии</a>.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="heading4">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" href="#collapse4" aria-expanded="true" aria-controls="collapse4">
+                                    Как можно с вами связаться?
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapse4" class="collapse" role="tabpanel" aria-labelledby="heading4" data-parent="#accordion">
+                            <div class="card-body">
+                                Для этого Вам необходимо написать нам на почту
+                                <i class="far fa-envelope" aria-hidden="true"></i>
+                                <a href="mailto:support@parser24.online">support@parser24.online</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="heading5">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" href="#collapse5" aria-expanded="true" aria-controls="collapse5">
+                                    Мне не приходят письма о заказе на почту
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapse5" class="collapse" role="tabpanel" aria-labelledby="heading5" data-parent="#accordion">
+                            <div class="card-body">
+                                Во время выполнения заказа мы отправляем минимум 2 письма с данными заказа и результатами выполнения.
+                                <br>Если Вы не видите письма от нас в почтовом ящике, то проверьте:
+                                <br>1. Папку спам, возможно письма попали туда. Зайдите и сделайте отметку "Не спам", чтобы получать от нас письма.
+                                <br>2. Правильность ввода Вашего email при заказе. Если Вы ошиблись, то напишите нам на почту: <b>support@parser24.online</b>.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id = "block_comments_main">
+    <div class="container" >
+        <div class="row work-head text-center">
+            <div class="col comments-header ">
+            </div>
+        </div>
+        <div class="comments-body">
+        </div>
+    </div>
+</section>
+
+<section id = "block_contact">
+    <div class="container">
+        <div class="row work-head text-center">
+            <div class="col">
+                <h2>Хотите задать вопрос?</h2>
+                <p>Если Вам что-то не нравится, или хотите добавить что-то, то напишите нам. Вместе мы сделаем сервис лучше.<br>Не забудьте указать номер заказа, по которому возник вопрос.</p>
+            </div>
+        </div>
+
+        <div class="row block_contact">
+            <div class="col">
+                <form id="svyzform">
+                    <div class="form-group row">
+                        <label class="col-md-2">Ваше имя</label>
+                        <div class="col-md-10">
+                            <input id="send_name" required="" type="text" class="form-control" placeholder="Введите Ваше имя">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2">Email</label>
+                        <div class="col-md-10">
+                            <input id="send_email" required="" type="email" class="form-control" placeholder="Email для отправки ответа">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2">Ваш вопрос</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" id="send_text" rows="3" placeholder="Напишите Ваш вопрос и номер заказа. Мы обязательно ответим. Спасибо."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col text-center">
+                            <button type="button" class="btn btn-primary" id="send_mail_btn"><i class="far fa-envelope"></i>  Отправить</button>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <small class="form-text text-muted " style="text-align: center; margin: 0 auto;" >
+                           Нажимая на кнопку, вы даете согласие на <a style="font-size: 80%; font-weight: 400;color:black;" href="/politics" target="_blank" rel="nofollow">обработку персональных данных</a> и
+                           принимаете условия <a style="font-size: 80%; font-weight: 400;color:black;" href="/static-data/oferta.pdf" rel="nofollow" target="_blank">пользовательского соглашения.</a>
+                        </small>
+                    </div>
+                    <div class="row"></div>
+                    <div class="row" id="SendBlock" style="display:none;">
+                        <div class="col-md">
+                            <div class="alert alert-info" role="alert">
+                                <span id="InfoSendBlock"></span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

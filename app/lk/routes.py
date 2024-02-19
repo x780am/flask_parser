@@ -8,7 +8,11 @@ from app.auth.models import User
 
 @bp.route('/', methods=['GET'])
 def lk_home():
-    return render_template("lk/index.html", title='API')
+    return render_template("lk/index.html")
+
+@bp.route('/messages', methods=['GET'])
+def messages():
+    return render_template("lk/messages.html")
 
 
 @bp.route('/user/<username>')

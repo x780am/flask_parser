@@ -1,6 +1,6 @@
-from flask import render_template, redirect, flash, url_for, request, current_app
+from flask import render_template, redirect, flash, url_for, request, current_app, send_file
 from flask_login import current_user, login_required
-
+import os
 from app.main.forms import EmptyForm
 from app.auth.models import User
 from app.main import bp
@@ -12,6 +12,26 @@ from app.main import bp
 #         current_user.last_seen = datetime.now(timezone.utc)
 #         db.session.commit()
 
+@bp.route('/politics')
+def politics():
+    return render_template("politics.html")
+
+@bp.route('/rules')
+def rules():
+    return render_template("rules.html")
+
+@bp.route('/comments')
+def comments():
+    return render_template("comments.html")
+
+@bp.route('/help')
+def help():
+    return render_template("help.html")
+
+@bp.route('/parser')
+def parser():
+    return render_template("parser.html")
+
 @bp.route('/test1')
 def test1():
     current_app.logger.info('Вошли в test')
@@ -20,11 +40,9 @@ def test1():
                 
 
 @bp.route('/')
-@bp.route('/index')
-@login_required
-def index():
-    
-    return render_template("index.html", title='Home Page')
+# @bp.route('/index')
+def index():    
+    return render_template("index.html")
 
 
     

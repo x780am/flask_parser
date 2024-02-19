@@ -1,0 +1,78 @@
+
+<section id = "footer" >
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h2 class="title">Контакты</h2>
+                <div class="logo">
+                    <img src="{{ url_for('main.static', filename='img/favicon.ico') }}" width="30" height="30" class="d-inline-block align-top" alt="parser24"> parser24
+                </div>
+                <div class="body">
+                    <ul class="list-unstyled">
+                        <li class="footer-sprite address">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i> Россия, Москва
+                        </li>
+                        <li class="footer-sprite email">
+                            <i class="fab fa-telegram-plane"></i>&nbsp;<a href="https://t.me/parser24_online">@parser24.online</a>
+                        </li>
+                        <li class="footer-sprite email">
+                            <i class="far fa-envelope" aria-hidden="true"></i>&nbsp;<a href="mailto:support@parser24.online">support@parser24.online</a>
+
+                        </li>
+                    </ul>
+                </div>
+
+                <h2 class="title">Способы оплаты</h2>
+                <div class="pays">
+                    <img src="{{ url_for('main.static', filename='img/pay-1.jpg') }}" alt="парсер авито" title="Visa">
+                    <img src="{{ url_for('main.static', filename='img/pay-2.jpg') }}" alt="парсер авито" title="MasterCard">
+                    <img src="{{ url_for('main.static', filename='img/pay-3.jpg') }}" alt="парсер авито" title="Яндекс деньги">
+                    <img src="{{ url_for('main.static', filename='img/pay-4.jpg') }}" alt="парсер авито" title="Qiwi">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h2 class="title">Новости</h2>
+                <ul class="news list-unstyled">
+                  	<li>
+                        <small>9 января 2024</small>
+                       <small>Добавили парсинг объявлений из профиля продавца</small>
+                    </li>
+                    <li>
+                        <small>8 мая 2022</small>
+                       <small>Телефоны не парсятся</small>
+                    </li>
+                    <li>
+                        <small>26 октября 2021</small>
+                        <small>Переезд сайта https://avi2-parser.online/ на новый домен</small>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col-md-4">
+                <h2 class="title">ПОДПИШИТЕСЬ</h2>
+                <p>Подпишитесь на нашу рассылку, чтобы получать важные новости и предложения</p>
+                <div class="body">
+                    <form id ='sign_form'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">@</div>
+                                <input type="email" class="form-control" id="sign_email" required placeholder="Введите ваш Email">
+                            </div>
+                        </div>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button"  id="sign_btn" onclick="signUp();">Подписаться</button>
+                        </span>
+                        <small>Нажимая на кнопку, вы даете согласие на обработку своих персональных данных</small>
+                    </form>
+                </div>
+                <div class="sec">
+                    
+                    <p><a href="{{ url_for('main.politics')}}" target="_blank" rel="nofollow">Политика обработки персональных данных</a> </p>
+                    <p><a href="{{ url_for('main.static', filename='/files/oferta.pdf') }}" rel="nofollow" target="_blank">Пользовательское соглашение</a></p>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

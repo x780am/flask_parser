@@ -1,0 +1,278 @@
+
+
+html, body{
+	height: 100%;
+}
+body {
+  background: #fff;
+  font-family: Ubuntu, sans-serif;
+  font-size: 17px;
+  color:  #434c59; /*цвет текста*/
+  font-weight: 400;
+  min-width: 320px;
+
+}
+
+/*ссылки*/
+a{
+    font-family: Montserrat, sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    color: #458cca;
+    text-decoration: none
+}
+/*при наведении*/
+a:hover{
+    color: #2cc7c1;
+}
+.underline{
+     text-decoration: underline;
+}
+
+
+.purple_color{
+    color: #a169f7;
+    }
+    img{
+        height:auto;
+        max-width: 100%;
+    }
+    section{/*:not(#block_comments)*/
+        position: relative; /*позиционировать внутри секции*/
+        padding: 15px 0 30px 0;
+    }
+    
+    h2{
+        font-family: Montserrat, sans-serif;
+        font-size: 28px;
+        margin-top: 0;
+        text-transform:uppercase;
+    }
+    .blue{
+        color: #458cca;
+        font-weight: bold;
+    }
+    .orange{
+        color: #ffc107;
+    }
+    
+    .btn{
+        font-family: Montserrat, sans-serif;
+        font-size: 18px;
+        text-transform:uppercase;
+        padding:10px 20px; /*отступ от текста*/
+        margin:0px 20px ;/*отступ наружние*/
+        transition:background .5s;
+        width: 350px;
+    }
+    /*для формы логин не надо отступ*/
+    #section_login .btn, #section_pay_add .btn{
+        margin-left: 0px;
+    }
+    .btn-outline-success{
+        width: 13px;
+        font-size: 13px;
+    
+        padding:5px 5px; /*отступ от текста*/
+        margin:0px 5px ;/*отступ наружние*/
+    }
+    .btn-outline-dark{
+        width: 13px;
+        font-size: 13px;
+    
+        padding:5px 5px; /*отступ от текста*/
+        margin:0px 0px ;/*отступ наружние*/
+    }
+    /*для каждой кнопки*/
+    .btn-primary{
+        background: #ffc107;
+        border-color: #ffc107;
+        color: #000;
+        padding: 10px 10px; /*отступ от текста*/
+        margin: 5px 10px ;/*отступ наружние*/
+    }
+    
+    .btn-primary:hover{
+        background: #ca9d14;
+        border-color: #ca9d14;
+    }
+    .btn:disabled{
+        background: #a169f7;
+        border-color: #a169f7;
+        color: #fff;
+    }
+    .btn:disabled:hover{
+        background: #a169f7;
+        border-color: #a169f7;
+        color: #000;
+    }
+    .btn-info{
+        background: #59a9ff;
+        border-color: #59a9ff;
+        color: #000;
+        padding: 10px 10px; /*отступ от текста*/
+        margin: 5px 10px ;/*отступ наружние*/
+    }
+    
+    .btn-success{
+        background: #97cf26;
+        border-color: #97cf26;
+        color: #000;
+        padding: 10px 10px;
+        margin: 5px 10px ;
+    }
+    p{
+        word-break: break-word;
+    }
+
+/*================ navbar ======================*/
+/* цвет фона и рамки навигационного меню */
+.navbar{
+    background-color: rgba(67,76,89, 0.9);
+    color: #fff;
+}
+.navbar a{
+    color: #fff;
+}
+/* цвет текста, содержащий название сайта или бренда */
+/* .navbar .logo{
+    color: #fff;
+    font-size: 22px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-right:0px;
+    opacity: 1;
+} */
+/* отступ от логотипа */
+/* .navbar .collapse{
+    margin-left:20px;
+} */
+
+
+/* Цвет пунктов навигационного меню */
+.navbar .nav-link{
+    color: rgba(255,255,255,0.9);
+}
+.navbar-nav .nav-link.active{
+    color: rgba(255,255,255,0.9);
+    font-size: 18px;
+}
+/* цвет текста (название сайта или бренда), при поднесении к нему курсора мышки или при его нахождении в фокусе */
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus,
+.navbar .nav-link:hover,
+.navbar .nav-link:focus{
+    color: #ffc107;
+}
+/* Цвет пунктов меню в раскрывающихся списках */
+.navbar  .dropdown-menu  {
+        color: #ffc107;
+        background-color: rgba(67,76,89, 0.9);
+}
+
+.navbar .navbar-toggler {
+    border-color: #fff;
+}
+/*================ navbar конец ======================*/
+
+/*================= footer ==============================*/
+#footer{
+    background-color: #434c59;
+    color: #fff;
+}
+#footer .title {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffc107;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+
+#footer .btn{
+    margin: 0px 0px;
+    margin-top: 5px;
+    font-size: 15px;
+    width: 100%;
+}
+#footer .form-group{
+    margin: 0px 0px;
+}
+
+#footer .pays{
+    margin: 10px 0px;
+}
+
+#footer .logo {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 10px ;
+    padding-bottom: 20px;
+    color: #fff;
+    font-size: 22px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#footer .sec {
+	margin-top: 10px;
+}
+#footer .sec p{
+	margin: 10px 0px;
+}
+
+#footer .news a{
+    color: #fff;
+}
+#footer ul.news>li>small {
+    display: block;
+}
+
+#footer ul.news>li {
+    padding: 15px 0;
+    border-bottom: rgba(255,255,255,0.07) 1px solid;
+}
+/*================= footer конец ==============================*/
+
+
+/*=====================================================*/
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1200px) {
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+
+}
+
+@media only screen and (max-width : 450px) {
+
+	h2{
+		font-size: 20px;
+	}
+	p{
+		font-size: 17px;
+	}
+	.btn{
+		font-size: 15px;
+		width: 290px;
+	}
+        .btn-outline-dark{
+            width: 13px;
+            font-size: 13px;
+
+            padding:5px 5px; /*отступ от текста*/
+            margin:0px 0px ;/*отступ наружние*/
+        }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+
+}

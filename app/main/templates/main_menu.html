@@ -1,33 +1,87 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container">
-      <a class="navbar-brand" href="{{ url_for('main.index') }}">Microblog</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ url_for('main.index') }}">Главная</a>
-          </li>
-         
-        </ul>
-        <ul class="navbar-nav mb-2 mb-lg-0">
-          {% if current_user.is_anonymous %}
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ url_for('auth.login') }}">Вход</a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ url_for('lk.user', username=current_user.username) }}">Профиль</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="{{ url_for('admin.all_users') }}">Пользователи</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ url_for('auth.logout') }}">Выход</a>
-          </li>
-          {% endif %}
-        </ul>
-      </div>
+<nav class="navbar navbar-expand-md fixed-top"> 
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="{{ url_for('main.static', filename='img/favicon.ico') }}" alt="parser24" width="30" height="30" class="d-inline-block align-text-top">
+      PARSER24
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_menu" aria-controls="navbar_menu" aria-expanded="false" aria-label="Меню">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse " id="navbar_menu">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint=='main.index' %}active{%endif %}" aria-current="page" href="{{ url_for('main.index') }}">
+            Главная
+          </a>
+        </li> 
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint=='main.parser' %}active{%endif %}" href="{{ url_for('main.parser') }}">
+            Парсер
+          </a>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link {% if request.endpoint=='main.comments' %}active{%endif %}" href="{{ url_for('main.comments') }}">
+            Отзывы
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint=='main.help' %}active{%endif %}" href="{{ url_for('main.help') }}">
+            Помощь
+          </a>
+        </li>
+        {% if current_user.is_admin %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-tie"></i> Admin
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="#">Список заказов</a>              
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('admin.all_users') }}">Пользователи</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Добавить платеж</a>              
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Логи</a>              
+            </li>
+          </ul>
+        </li>
+        {% endif %}
+        
+      </ul>
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        {% if current_user.is_anonymous %}
+        <li class="nav-item">
+          <a class="btn btn-outline-warning me-3" href="{{ url_for('auth.login') }}">Войти</a>
+        </li>
+        {% else %}           
+        <li class="nav-item"></li>     
+          <a class="nav-link" href="{{ url_for('lk.messages') }}" style="margin-right: 12px;" 
+          data-toggle="tooltip" data-placement="bottom" title="Новых сообщений нет">
+          <i class="far fa-bell"></i>
+          </a>
+        </li> 
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="far fa-money-bill-alt"></i> {{ current_user.balance }} ₽
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Пополнить счет</a></li>
+            <li><a class="dropdown-item" href="#">Платежи</a></li>
+            <li><a class="dropdown-item" href="#">Заказы</a></li>
+            <li><a class="dropdown-item" href="#">Партнерка</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('lk.user', username=current_user.username) }}">Профиль</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Выход</a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+      
     </div>
-  </nav> 
+  </div>
+</nav> 
+      

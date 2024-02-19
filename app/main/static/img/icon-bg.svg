@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="87px" height="100px">
+    <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#56606F;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#3C4450;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    <path fill="url(#grad)" d="M0,28c0-1.65,1.17-3.673,2.601-4.495l38.297-22.01c1.431-0.822,3.771-0.822,5.202,0l38.299,22.011C85.83,24.327,87,26.35,87,28v44c0,1.65-1.17,3.673-2.601,4.495L46.1,98.505c-1.431,0.822-3.771,0.822-5.202,0L2.601,76.495C1.17,75.673,0,73.65,0,72V28z"/>
+</svg>

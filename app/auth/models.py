@@ -22,6 +22,7 @@ class User(UserMixin):
         self.password = None
         self.date_last = None
         self.is_admin = False
+        self.balance = False
         
     # получить значение по user_id или login
     def get(self, user_id=None, login=None) -> Optional["User"]:
@@ -29,9 +30,9 @@ class User(UserMixin):
         if user_id or login:
             with mysql() as db:
                 if user_id:
-                    select_result = db.select_one('SELECT * FROM users where id= %(id)s ', {'id':user_id})
+                    select_result = db.select_one('SELECT id, login, pass, date_last, balance FROM users where id= %(id)s ', {'id':user_id})
                 elif login:
-                    select_result = db.select_one('SELECT * FROM users where login= %(login)s', {'login':login})
+                    select_result = db.select_one('SELECT id, login, pass, date_last, balance FROM users where login= %(login)s', {'login':login})
                 if select_result:                
                     self.password_hash = select_result['pass']
                     self.id = select_result['id']
@@ -39,6 +40,7 @@ class User(UserMixin):
                     self.username = self.login 
                     self.date_last = select_result['date_last']
                     self.is_admin = True if self.id == 1 else  False
+                    self.balance = select_result['balance']
                     return(self)
                 else:                
                     self.id = None
@@ -47,7 +49,8 @@ class User(UserMixin):
                     self.username = self.login 
                     self.password = None   
                     self.date_last =  None    
-                    self.is_admin = False     
+                    self.is_admin = False   
+                    self.balance = False  
                     # print(db.error)
                     return(None)
         else:

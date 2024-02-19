@@ -56,15 +56,20 @@ a:hover{
         color: #ffc107;
     }
     
-    .btn{
+    #header .btn, 
+    #footer .btn, 
+    #block_contact .btn, 
+    #block_work .btn, 
+    #block_polya .btn
+    {
         font-family: Montserrat, sans-serif;
         font-size: 18px;
         text-transform:uppercase;
-        padding:10px 20px; /*отступ от текста*/
-        margin:0px 20px ;/*отступ наружние*/
+        padding:10px 20px; 
+        margin:0px 20px ;
         transition:background .5s;
         width: 350px;
-    }
+    } 
     /*для формы логин не надо отступ*/
     #section_login .btn, #section_pay_add .btn{
         margin-left: 0px;
@@ -121,6 +126,7 @@ a:hover{
         padding: 10px 10px;
         margin: 5px 10px ;
     }
+
     p{
         word-break: break-word;
     }

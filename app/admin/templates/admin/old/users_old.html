@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content_head %}
+<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <h1> Пользователи </h1>
+
+    <div id="table"></div>
+
+    </table>
+
+    
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script>
+        const updateUrl = (prev, query) => {
+          return prev + (prev.indexOf('?') >= 0 ? '&' : '?') + new URLSearchParams(query).toString();
+        };
+
+        new gridjs.Grid({
+            
+            columns: [
+              { id: 'id', name: 'id'},
+              {id: 'login', name: 'Логин'},
+              {id: 'reg_date', name: 'Дата регистрации'},
+            ],
+            server: {              
+              method: 'POST',
+              url: '/admin/users_data',
+              then: results => results.data.map(user => [
+              user.id, user.login, user.reg_date ]),
+              total: results => results.total,
+            },
+            search: {
+              enabled: true,
+              server: {
+                url: (prev, search) => {
+                  return updateUrl(prev, {search});
+                },
+              },
+            },
+            sort: {
+              enabled: true,
+              multiColumn: false,
+              server: {
+                url: (prev, columns) => {
+                  const columnIds = ['id', 'login', 'reg_date',];
+                  const sort = columns.map(col => (col.direction === 1 ? '+' : '-') + columnIds[col.index]);
+                  console.log(sort)
+                  return updateUrl(prev, {sort});
+                },
+              },
+            }, 
+            pagination: {
+              enabled: true,
+              limit: 10,
+              server: {
+                url: (prev, page, limit) =>  {
+                  return updateUrl(prev, {start: page * limit, length: limit});
+                },
+              }
+            },
+            language: {
+                search: {
+                  placeholder: 'Поиск...',
+                },
+                sort: {
+                  sortAsc: 'Сортировка по возрастанию',
+                  sortDesc: 'Сортировка по убыванию',
+                },
+                pagination: {
+                  previous: 'Назад',
+                  next: 'Вперед',
+                  navigate: (page, pages) => `Страница ${page} из ${pages}`,
+                  page: (page) => `Страница ${page}`,
+                  showing: 'Отображение с',
+                  of: 'из',
+                  to: 'по',
+                  results: 'записей',
+                },
+                loading: 'Загрузка...',
+                noRecordsFound: 'Не найдено подходящих записей',
+                error: 'Ошибка при загрузке данных',
+              }
+             }).render(document.getElementById('table'));
+
+             
+    </script>
+
+
+    
+   
+{% endblock %}

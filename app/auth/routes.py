@@ -29,7 +29,8 @@ def login():
             flash('Неправильный логин или пароль')
             return redirect(url_for('auth.login'))
         user.update_when_login_user(ip=request.environ['REMOTE_ADDR'])
-        login_user(user, remember=form.remember_me.data)
+        # login_user(user, remember=form.remember_me.data)
+        login_user(user, remember=True)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('main.index')

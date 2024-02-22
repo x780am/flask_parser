@@ -14,7 +14,7 @@ class LoginForm(MyBaseForm):
     # Валидатор DataRequiredпросто проверяет, что поле не заполнено пустым
     username = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
-    remember_me = BooleanField('Запомнить меня')
+    # remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
     
 class RegistrationForm(MyBaseForm):   

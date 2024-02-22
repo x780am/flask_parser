@@ -35,7 +35,7 @@ class User(UserMixin):
                     select_result = db.select_one('SELECT id, login, pass, date_last, balance FROM users where login= %(login)s', {'login':login})
                 if select_result:                
                     self.password_hash = select_result['pass']
-                    self.id = select_result['id']
+                    self.id = int(select_result['id'])
                     self.login = select_result['login']
                     self.username = self.login 
                     self.date_last = select_result['date_last']

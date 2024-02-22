@@ -29,4 +29,23 @@ class Config:
     # количество элементов на странице
     USERS_PER_PAGE = 10
     
+    # защита от атак    
+    # Secure ограничивает файлы cookie только трафиком HTTPS.
+    SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE') or True    
+    # True - cookie будут отправлены по зашифрованному каналу
+    REMEMBER_COOKIE_SECURE = os.environ.get('REMEMBER_COOKIE_SECURE') or True
+    # HttpOnly защищает содержимое файлов cookie от чтения с помощью JavaScript.
+    SESSION_COOKIE_HTTPONLY = os.environ.get('SESSION_COOKIE_HTTPONLY') or True
+    REMEMBER_COOKIE_HTTPONLY = os.environ.get('REMEMBER_COOKIE_HTTPONLY') or True
+    # SameSite ограничивает отправку файлов cookie с запросами от внешних сайтов. 
+    # Может быть установлено значение 'Lax'(рекомендуется) или 'Strict'. 
+    # Lax предотвращает отправку файлов cookie с запросами CSRF с внешних сайтов, такими как отправка формы. 
+    # Strict предотвращает отправку файлов cookie со всеми внешними запросами, включая переход по обычным ссылкам.
+    SESSION_COOKIE_SAMESITE = os.environ.get('SESSION_COOKIE_SAMESITE') or 'Lax'
+    # время жизни куки в секундах. 1 день=86400, 7 дней=604800
+    PERMANENT_SESSION_LIFETIME = int(os.environ.get('PERMANENT_SESSION_LIFETIME')) or 86400
+    
+    
+
+    
     

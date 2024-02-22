@@ -1,16 +1,30 @@
-from flask import render_template, redirect, flash, url_for, request, current_app, send_file
+from flask import render_template, redirect, flash, url_for, request, current_app, send_file, Response, session
 from flask_login import current_user, login_required
 import os
 from app.main.forms import EmptyForm
 from app.auth.models import User
 from app.main import bp
 
-
-# @app.before_request
+# запускается перед каждым запросом к экземпляру приложения.
+# @bp.before_request
 # def before_request():
-#     if current_user.is_authenticated:
-#         current_user.last_seen = datetime.now(timezone.utc)
-#         db.session.commit()
+    # current_app.logger.debug('Request Headers: %s', request.headers)
+    # current_app.logger.debug('Request Data: %s', request.get_data())
+    # current_app.logger.debug(f'[{request.method}] : {request.url}')
+    # current_app.logger.debug('Request : %s', str(request.cookies))
+    # current_app.logger.debug('Request : %s', Response.status)
+    # current_app.logger.debug('session : %s', session)
+    
+
+# запускается после каждого запроса к экземпляру приложения.
+# @bp.after_request()
+# def after_request():
+#     pass
+
+# # регистрирует функцию, которая будет запускаться в конце каждого запроса.
+# @bp.teardown_request()
+# def teardown_request():
+#     pass
 
 @bp.route('/politics')
 def politics():
@@ -32,11 +46,16 @@ def help():
 def parser():
     return render_template("parser.html")
 
-@bp.route('/test1')
-def test1():
-    current_app.logger.info('Вошли в test')
-    current_app.logger.error('Вошли в test')
-    return "test"
+@bp.route('/test_logger')
+def test():
+    #  тест logger
+    current_app.logger.debug('Test debug message')
+    current_app.logger.info('Test info message')
+    current_app.logger.warning('Test warning message')
+    current_app.logger.error('Test error message')
+    current_app.logger.critical('Test critical message')
+    print('Test print message')
+    return "test_logger"
                 
 
 @bp.route('/')
@@ -60,8 +79,3 @@ def send_mail():
     
     return 'Отправили 2 сообщения на почту админа, проверь'
 
-
-@bp.route('/test', methods=['GET'])
-def test():
-    print(current_app.url_map)
-    return 'current_app.url_map'

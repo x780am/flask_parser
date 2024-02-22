@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content_head %}
+<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+<style>
+  table .grid-table-my{
+    color: #000;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+    {% block content_top%}
+    {% endblock %}
+    <h1 class="text-center"> {{header}} </h1>
+
+    {% block content_message%}
+    {% endblock %}
+
+    <div id="table"></div>
+    
+
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+
+    <script>
+        const updateUrl = (prev, query) => {
+          return prev + (prev.indexOf('?') >= 0 ? '&' : '?') + new URLSearchParams(query).toString();
+        };
+        const editableCellAttributes = (data, row, col) => {
+            if (row) {
+              return {'title': row.cells[0].data};
+            }
+            else {
+              return {'title': 'not row'};
+            }
+        };
+        new gridjs.Grid({            
+            columns: [
+                {% for column in columns %}{                   
+                    {% if 'id' in column %}id: '{{ column.id }}',{% endif %} 
+                    name: '{{ column.name }}', 
+                    attributes: (data, row, col, cell) => {
+                      if (cell || row){
+                        if (data) {                      
+                          return {'title': data};
+                        }
+                      }                      
+                      else {
+                        return {'title': '{{ column.name }}'};
+                      }
+                    },
+                    {% if 'sort' in column %}{% if column.sort %}sort: true,{% else %}sort: false,{% endif %}{% endif %} 
+                    {% if 'formatter' in column %}{% if column.id == 'buttons' %}formatter:(_, row) =>{{column.formatter|safe}},{% else %}formatter: (cell) => {{column.formatter}},{% endif %}{% endif %} 
+                    {% if 'hidden' in column %}{% if column.hidden %}hidden: true,{% else %}hidden: false,{% endif %}{% endif %} 
+                },{% endfor %}
+            ],
+            server: { 
+              {% if method %}method: '{{method}}', {% endif %}  
+              url: '{{ data_url }}',
+              then: results => results.data,
+              total: results => results.total,
+            },
+            search: {
+              enabled: true,
+              server: {
+                url: (prev, search) => {
+                  return updateUrl(prev, {search});
+                },
+              },
+            },
+            sort: {
+              enabled: true,
+              multiColumn: false,
+              server: {
+                url: (prev, columns) => {
+                  const columnIds = [{% for column in columns %} '{{column.id}}',{% endfor %}];
+                  const sort = columns.map(col => (col.direction === 1 ? '+' : '-') + columnIds[col.index])
+                  console.log(sort)
+                  return updateUrl(prev, {sort});
+                },
+              },
+            }, 
+            pagination: {
+              enabled: true,
+              limit: {{limit_row}},
+              server: {
+                url: (prev, page, limit) =>  {
+                  return updateUrl(prev, {start: page * limit, length: limit});
+                },
+              }
+            },
+            style: {
+              table: {
+                border: '3px solid #ccc',
+                'font-size': '15px'                
+              },
+              th: {
+                'background-color': 'rgba(0, 0, 0, 0.1)',
+                color: '#000',
+                'border-bottom': '3px solid #ccc',
+                'text-align': 'center'
+              },
+              td: {
+                'text-align': 'center'
+              }
+            },
+            className: {
+              table: 'table table-hover table-sm align-middle'
+            },
+            
+            language: {
+                search: {
+                  placeholder: 'Поиск...',
+                },
+                sort: {
+                  sortAsc: 'Сортировка по возрастанию',
+                  sortDesc: 'Сортировка по убыванию',
+                },
+                pagination: {
+                  previous: 'Назад',
+                  next: 'Вперед',
+                  navigate: (page, pages) => `Страница ${page} из ${pages}`,
+                  page: (page) => `Страница ${page}`,
+                  showing: 'Отображение с',
+                  of: 'из',
+                  to: 'по',
+                  results: 'записей',
+                },
+                loading: 'Загрузка...',
+                noRecordsFound: 'Не найдено подходящих записей',
+                error: 'Ошибка при загрузке данных',
+              }
+             }).render(document.getElementById('table'));
+
+             
+    </script>
+
+
+    
+   
+{% endblock %}

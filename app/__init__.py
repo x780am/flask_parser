@@ -2,11 +2,10 @@ import os
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
-
 import logging
-from logging.handlers import SMTPHandler, RotatingFileHandler
-
+from app import logger_set
 from config import Config
+from flask_paranoid import Paranoid
 
 mail = Mail()
 login = LoginManager()
@@ -18,8 +17,20 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     
+    # создаем логгер с именем проекта и меняем его
+    # logger = logging.getLogger(__name__)
+    logger_set.set_logger(logger=logging.getLogger(__name__), config=app.config)
+    
+    # авторизация
     login.init_app(app)
+    # отправка email
     mail.init_app(app)
+    """При вышеуказанной настройке каждый раз, когда сеанс обнаруживается как исходящий с другого IP-адреса или 
+    пользовательского агента, расширение блокирует запрос, очищает сеанс пользователя и файл cookie запоминания 
+    Flask-Login (если он найден), а затем выполняет перенаправление. на корневой URL-адрес сайта."""
+    if not app.debug:
+        paranoid = Paranoid(app)
+        paranoid.redirect_view = '/'
 
     # Я поместил импорт проекта прямо над элементом, app.register_blueprint()
     # чтобы избежать циклических зависимостей.
@@ -27,7 +38,6 @@ def create_app(config_class=Config):
     app.register_blueprint(errors_bp)
 
     from app.auth import bp as auth_bp
-    # app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(auth_bp)
     
     from app.main import bp as main_bp
@@ -40,38 +50,10 @@ def create_app(config_class=Config):
     app.register_blueprint(api_bp, url_prefix='/api')
     
     from app.lk import bp as lk_bp
-    app.register_blueprint(lk_bp, url_prefix='/lk')
-
-    # if not app.debug and not app.testing:
-    if 1==1:
-        if app.config['MAIL_SERVER']:
-            # отправка писем админам
-            auth = None
-            if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
-                auth = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
-            
-            mail_handler = SMTPHandler(mailhost=app.config['MAIL_SERVER'], 
-                                    fromaddr=app.config['ADMIN'], # от кого
-                                    toaddrs=app.config['ADMIN'], # кому
-                                    subject='Flask_parser Ошибки', # Заголовок 
-                                    credentials=auth, 
-                                    secure=())
-            mail_handler.setLevel(logging.ERROR)
-            app.logger.addHandler(mail_handler)
-            
-        # логирование в файл
-        if not os.path.exists('logs'):
-            os.mkdir('logs')
-        file_handler = RotatingFileHandler('logs/flask_parser.log', maxBytes=10240,
-                                        backupCount=10)
-        file_handler.setFormatter(logging.Formatter(
-            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-        file_handler.setLevel(logging.INFO)
-        app.logger.addHandler(file_handler)
-
-        app.logger.setLevel(logging.INFO)
-        app.logger.info('Flask_parser startup')
-
+    app.register_blueprint(lk_bp, url_prefix='/lk')      
+    
+    app.logger.info('Приложение Flask_parser запущено')
+    
     return app
 
 

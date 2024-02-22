@@ -322,8 +322,9 @@ class MySql:
 def main():
     with MySql() as db:
         # select_result = db.select_one(f'SELECT * FROM cron1 where id={id} or id={2}')
-        select_result = db.select_one('SELECT * FROM cron where id= %(id)s ', {'id':'1'})
-        # select_result = db.update('cron', {'comment': 'комментарий3', 'name': 'test3'}, 'id=%(id)s', {'id': '16'})
+        # select_result = db.select_one('SELECT * FROM cron where id> %(id)s  limit %(limit)s offset %(offset)s', {'id':'1', 'limit': 1, 'offset': 1})
+        select_result = db.select('SELECT * FROM cron  order by %(order) desc', { 'order': 'id'})
+       # select_result = db.update('cron', {'comment': 'комментарий3', 'name': 'test3'}, 'id=%(id)s', {'id': '16'})
         # select_result = db.delete('cron', {'id': '22', 'stop': '1'})
         # UPDATE `proxy` SET `type` = NULL WHERE `proxy`.`id` = 6087
         # select_result = db.update('proxy', {'type': 'NULL'}, 'id=%(id)s', {'id': '6087'})

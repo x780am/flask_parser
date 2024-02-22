@@ -35,10 +35,19 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="#">Список заказов</a>              
+              <a class="dropdown-item" href="{{ url_for('admin.orders') }}">Список заказов</a>              
             </li>
             <li>
-              <a class="dropdown-item" href="{{ url_for('admin.all_users') }}">Пользователи</a>
+              <a class="dropdown-item" href="{{ url_for('admin.doxod') }}">Доход в день</a>              
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('admin.doxod_month') }}">Доход в месяц</a>              
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('admin.users') }}">Пользователи</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('admin.payments') }}">Платежи</a>
             </li>
             <li>
               <a class="dropdown-item" href="#">Добавить платеж</a>              
@@ -71,8 +80,8 @@
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Пополнить счет</a></li>
-            <li><a class="dropdown-item" href="#">Платежи</a></li>
-            <li><a class="dropdown-item" href="#">Заказы</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('lk.payments')}}">Платежи</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('lk.orders')}}">Заказы</a></li>
             <li><a class="dropdown-item" href="#">Партнерка</a></li>
             <li><a class="dropdown-item" href="{{ url_for('lk.user', username=current_user.username) }}">Профиль</a></li>
             <li><hr class="dropdown-divider"></li>

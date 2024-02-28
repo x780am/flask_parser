@@ -104,7 +104,7 @@ def get_ip():
     ip = ip + f"<br>HTTP_X_REAL_IP = {request.environ.get('HTTP_X_REAL_IP', request.remote_addr)}"
     ip = ip + f"<br>X-Forwarded-For = {request.environ.get('X-Forwarded-For', request.remote_addr)}"
     ip = ip + f"<br>remote_addr = {request.remote_addr}"
-    
+    ip = ip + f"<br>remote_addr =  {get_ip()}"
     return ip
     # if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
     #     print(request.environ['REMOTE_ADDR'])

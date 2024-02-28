@@ -196,14 +196,15 @@ a:hover{
 }
 
 
-#footer .btn{
+#footer #subscribe_form .btn{
     margin: 0px 0px;
     margin-top: 5px;
     font-size: 15px;
     width: 100%;
 }
-#footer .form-group{
+#footer #subscribe_form .input-group{
     margin: 0px 0px;
+    /* margin-bottom: 1px; */
 }
 
 #footer .pays{

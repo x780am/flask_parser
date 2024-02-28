@@ -3,8 +3,24 @@
 {% block content_head %}
 <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
 <style>
-  table .grid-table-my{
+  table.gridjs-table{
+    border: 3px solid #ccc;
+    font-size: 15px;                
+  }
+
+  input.gridjs-input {
+    padding: 5px 5px;
+  }
+  td.gridjs-td{
+    text-align: center;
+    padding: 7px 12px;
+  }
+  th.gridjs-th{
+    background-color: rgba(0, 0, 0, 0.1);
     color: #000;
+    border-bottom: 3px solid #ccc;
+    text-align: center;
+    padding: 7px 5px;
   }
 </style>
 {% endblock %}
@@ -89,7 +105,7 @@
                 },
               }
             },
-            style: {
+            /*style: {
               table: {
                 border: '3px solid #ccc',
                 'font-size': '15px'                
@@ -103,7 +119,7 @@
               td: {
                 'text-align': 'center'
               }
-            },
+            },*/
             className: {
               table: 'table table-hover table-sm align-middle'
             },

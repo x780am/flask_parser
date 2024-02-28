@@ -54,7 +54,7 @@ def payments():
     
     return render_template('lk/payments.html', 
                            data_url = f'/admin/get_user_payments_data/{user_id}', 
-                           limit_row = 20,
+                           limit_row = 15,
                            method = 'POST',
                            columns = columns,
                            header=f'История платежей'
@@ -70,7 +70,7 @@ def orders():
     
     return render_template('lk/orders.html', 
                            data_url = f'/admin/get_user_orders_data/{user_id}', 
-                           limit_row = 20,
+                           limit_row = 15,
                            method = 'POST',
                            columns = columns,
                            header=f'История заказов'

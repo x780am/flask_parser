@@ -428,62 +428,6 @@
     </div>
 </section>
 
-<section id = "block_contact">
-    <div class="container">
-        <div class="row work-head text-center">
-            <div class="col">
-                <h2>Хотите задать вопрос?</h2>
-                <p>Если Вам что-то не нравится, или хотите добавить что-то, то напишите нам. Вместе мы сделаем сервис лучше.<br>Не забудьте указать номер заказа, по которому возник вопрос.</p>
-            </div>
-        </div>
-
-        <div class="row block_contact">
-            <div class="col">
-                <form id="svyzform">
-                    <div class="form-group row">
-                        <label class="col-md-2">Ваше имя</label>
-                        <div class="col-md-10">
-                            <input id="send_name" required="" type="text" class="form-control" placeholder="Введите Ваше имя">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-2">Email</label>
-                        <div class="col-md-10">
-                            <input id="send_email" required="" type="email" class="form-control" placeholder="Email для отправки ответа">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-2">Ваш вопрос</label>
-                        <div class="col-md-10">
-                            <textarea class="form-control" id="send_text" rows="3" placeholder="Напишите Ваш вопрос и номер заказа. Мы обязательно ответим. Спасибо."></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col text-center">
-                            <button type="button" class="btn btn-primary" id="send_mail_btn"><i class="far fa-envelope"></i>  Отправить</button>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <small class="form-text text-muted " style="text-align: center; margin: 0 auto;" >
-                           Нажимая на кнопку, вы даете согласие на <a style="font-size: 80%; font-weight: 400;color:black;" href="/politics" target="_blank" rel="nofollow">обработку персональных данных</a> и
-                           принимаете условия <a style="font-size: 80%; font-weight: 400;color:black;" href="/static-data/oferta.pdf" rel="nofollow" target="_blank">пользовательского соглашения.</a>
-                        </small>
-                    </div>
-                    <div class="row"></div>
-                    <div class="row" id="SendBlock" style="display:none;">
-                        <div class="col-md">
-                            <div class="alert alert-info" role="alert">
-                                <span id="InfoSendBlock"></span>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+{% include 'contact.html' %}
 
 {% endblock %}

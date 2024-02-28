@@ -9,16 +9,7 @@ from app.auth.models import User
 from app.auth.email import send_password_reset_email
 
 @bp.route('/login', methods=['GET', 'POST'])
-def login():
-    # print(request.environ['REMOTE_ADDR'])
-    # print(request.remote_addr)
-    # print(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)  )
-    # print(request.headers.get('X-Forwarded-For', request.remote_addr))
-    
-    # if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
-    #     print(request.environ['REMOTE_ADDR'])
-    # else:
-    #     print(request.environ['HTTP_X_FORWARDED_FOR'])
+def login():  
         
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))

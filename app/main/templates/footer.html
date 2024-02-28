@@ -1,4 +1,3 @@
-
 <section id = "footer" >
     <div class="container">
         <div class="row">
@@ -52,27 +51,71 @@
                 <h2 class="title">ПОДПИШИТЕСЬ</h2>
                 <p>Подпишитесь на нашу рассылку, чтобы получать важные новости и предложения</p>
                 <div class="body">
-                    <form id ='sign_form'>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">@</div>
-                                <input type="email" class="form-control" id="sign_email" required placeholder="Введите ваш Email">
-                            </div>
+                    <form id ='subscribe_form' method="POST">
+                        {{ subscribe_form.csrf_token }}
+                        <div class="text-danger my-2" id="csrf_token-error">
                         </div>
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button"  id="sign_btn" onclick="signUp();">Подписаться</button>
-                        </span>
+                        <div class="input-group">                      
+                            {{ subscribe_form.email.label(class='input-group-text') }}
+                            {{ subscribe_form.email(class='form-control') }}
+                            <div id="email-error" class="invalid-feedback"></div>
+                        </div>                        
+                        {{ subscribe_form.submit(class='btn btn-primary') }}
                         <small>Нажимая на кнопку, вы даете согласие на обработку своих персональных данных</small>
-                    </form>
+                    </form>                    
+                    <div class="alert alert-success" style="display: none;" id="subscribe_form_successmessage" role="alert"></div>                                            
                 </div>
-                <div class="sec">
-                    
+                <div class="sec">                    
                     <p><a href="{{ url_for('main.politics')}}" target="_blank" rel="nofollow">Политика обработки персональных данных</a> </p>
                     <p><a href="{{ url_for('main.static', filename='/files/oferta.pdf') }}" rel="nofollow" target="_blank">Пользовательское соглашение</a></p>
-                    
                 </div>
-
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    const subscribe_form = document.getElementById("subscribe_form");
+    const subscribe_form_successMessage = document.getElementById("subscribe_form_successmessage");
+    const subscribe_form_fields = {
+      csrf_token: {
+        input: subscribe_form.querySelector("[id='csrf_token']"),
+        error: subscribe_form.querySelector("[id='csrf_token-error']"),
+      },
+      email: {
+        input: subscribe_form.querySelector("[id='email']"),
+        error: subscribe_form.querySelector("[id='email-error']")
+      }     
+    };
+
+    subscribe_form.addEventListener('submit', async (e) => {
+        e.preventDefault();        
+        
+        for (var key of Object.keys(subscribe_form_fields)) {
+            subscribe_form_fields[key].input.classList.remove('is-invalid');
+            subscribe_form_fields[key].error.innerHTML = "";
+        }
+        const response = await fetch('{{ url_for("main.subscribe") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf_token: subscribe_form_fields.csrf_token.input.value,
+                email: subscribe_form_fields.email.input.value
+            })
+        });
+        if (response.ok) {            
+            subscribe_form_successMessage.innerHTML = await response.text();
+            subscribe_form.style.display = 'none';
+            subscribe_form_successMessage.style.display = 'block';
+        } else {
+            const errors = await response.json();
+            Object.keys(errors).forEach((key) => {
+                subscribe_form_fields[key].input.classList.add('is-invalid');
+                subscribe_form_fields[key].error.innerHTML = errors[key][0];
+            });
+        }
+    });
+
+</script>

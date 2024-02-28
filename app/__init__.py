@@ -52,6 +52,12 @@ def create_app(config_class=Config):
     from app.lk import bp as lk_bp
     app.register_blueprint(lk_bp, url_prefix='/lk')      
     
+    from app.main.forms import SubscribeForm
+    # то что будет в каждом шаблоне при рендеринге
+    @app.context_processor
+    def context_processor():
+        return dict(subscribe_form=SubscribeForm())
+    
     app.logger.info('Приложение Flask_parser запущено')
     
     return app

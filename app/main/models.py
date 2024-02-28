@@ -234,11 +234,11 @@ class Query_db():
         
         with mysql() as db:
              # определяем количество строк
-            count_data = db.select_one(f'SELECT count(*) as count_rows FROM {table_name}', {})
+            count_data = db.select_one(f'SELECT count(*) as count_rows FROM `{table_name}`', {})
             if count_data:              
                 total = count_data['count_rows'] 
             else:                   
-                print(db.error)                
+                print(f'[count_data] Ошибка: {db.error}')                
                 total=0                     
               
             #  запрос к БД

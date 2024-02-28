@@ -1,0 +1,114 @@
+<section id = "block_contact">
+    <div class="container">
+        <div class="row work-head text-center">
+            <div class="col">
+                <h2>Хотите задать вопрос?</h2>
+                <p>Если Вам что-то не нравится, или хотите добавить что-то, то напишите нам. Вместе мы сделаем сервис лучше.<br>Не забудьте указать номер заказа, по которому возник вопрос.</p>
+            </div>
+        </div>
+
+        <div class="row block_contact">
+            <div class="col">
+                <form id="contact_form">                    
+                    {{ contact_form.csrf_token }}
+                    <div class="text-danger my-2" id="csrf_token-error">
+                    </div>
+                    <div class="form-group row">                      
+                        {{ contact_form.name.label(class='col-md-2 col-form-label') }}
+                        <div class="col-md-10">
+                            {{ contact_form.name(class='form-control') }}
+                            <div id="name-error" class="invalid-feedback"></div>
+                        </div>
+                    </div> 
+                    <div class="form-group row">                      
+                        {{ contact_form.email.label(class='col-md-2 col-form-label') }}
+                        <div class="col-md-10">
+                            {{ contact_form.email(class='form-control') }}
+                            <div id="email-error" class="invalid-feedback"></div>
+                        </div>
+                    </div>   
+                    <div class="form-group row">                      
+                        {{ contact_form.message.label(class='col-md-2 col-form-label') }}
+                        <div class="col-md-10">
+                            {{ contact_form.message(class='form-control') }}
+                            <div id="message-error" class="invalid-feedback"></div>
+                        </div>
+                    </div>        
+                    <div class="form-group row">   
+                        <div class="col text-center">          
+                            {{ contact_form.submit(class='btn btn-primary') }}
+                        </div> 
+                    </div>
+
+                    <div class="form-group row">
+                        <small class="form-text text-muted " style="text-align: center; margin: 0 auto;" >
+                           Нажимая на кнопку, вы даете согласие на <a style="font-size: 80%; font-weight: 400;color:black;" href="/politics" target="_blank" rel="nofollow">обработку персональных данных</a> и
+                           принимаете условия <a style="font-size: 80%; font-weight: 400;color:black;" href="/static-data/oferta.pdf" rel="nofollow" target="_blank">пользовательского соглашения.</a>
+                        </small>
+                    </div>
+                    
+                </form>
+
+                <div class="alert alert-success" style="display: none;" id="contact_form_successmessage" role="alert"></div>
+                    
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    const contact_form = document.getElementById("contact_form");
+    const contact_form_successMessage = document.getElementById("contact_form_successmessage");
+    const contact_form_fields = {
+      csrf_token: {
+        input: contact_form.querySelector("[id='csrf_token']"),
+        error: contact_form.querySelector("[id='csrf_token-error']"),
+      },
+      name: {
+        input: contact_form.querySelector("[id='name']"),
+        error: contact_form.querySelector("[id='name-error']")
+      },
+      email: {
+        input: contact_form.querySelector("[id='email']"),
+        error: contact_form.querySelector("[id='email-error']")
+      },
+      message: {
+        input: contact_form.querySelector("[id='message']"),
+        error: contact_form.querySelector("[id='message-error']")
+      }     
+    };
+
+    contact_form.addEventListener('submit', async (e) => {
+        e.preventDefault();        
+        
+        for (var key of Object.keys(contact_form_fields)) {
+            contact_form_fields[key].input.classList.remove('is-invalid');
+            contact_form_fields[key].error.innerHTML = "";
+        }
+        const response = await fetch('{{ url_for("main.contact") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf_token: contact_form_fields.csrf_token.input.value,
+                name: contact_form_fields.name.input.value,
+                email: contact_form_fields.email.input.value,
+                message: contact_form_fields.message.input.value
+            })
+        });
+        if (response.ok) {            
+            contact_form_successMessage.innerHTML = await response.text();
+            contact_form.style.display = 'none';
+            contact_form_successMessage.style.display = 'block';
+        } else {
+            const errors = await response.json();
+            Object.keys(errors).forEach((key) => {
+                contact_form_fields[key].input.classList.add('is-invalid');
+                contact_form_fields[key].error.innerHTML = errors[key][0];
+            });
+        }
+    });
+
+</script>

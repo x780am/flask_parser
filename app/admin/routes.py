@@ -206,7 +206,7 @@ def doxod():
     
     return render_template('admin/doxod.html', 
                            data_url = '/admin/get_doxod_data', 
-                           limit_row = 10,
+                           limit_row = 15,
                            method = 'POST',
                            columns = columns,
                            header='Доход по дням'

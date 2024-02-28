@@ -158,6 +158,9 @@
 	background: #ededed;
 	border-bottom: 2px solid #ededed;
 
+}
+#block_contact .form-group{
+    margin-bottom: 10px;
 
 }
 /*===================== block_work ===================*/
@@ -167,7 +170,7 @@
 
 }
 .work-head {
-	padding-bottom: 20px;
+	padding-bottom: 15x;
 }
 .icobox__icon-holder {
 

@@ -1,8 +1,6 @@
-from flask import render_template, redirect, flash, url_for, request, current_app, send_file, Response, session
+from flask import render_template, redirect, jsonify, flash, url_for, request, current_app, send_file, Response, session
 from flask_login import current_user, login_required
-import os
-from app.main.forms import EmptyForm
-from app.auth.models import User
+from app.main.forms import SubscribeForm, ContactForm
 from app.main import bp
 
 # запускается перед каждым запросом к экземпляру приложения.
@@ -25,6 +23,7 @@ from app.main import bp
 # @bp.teardown_request()
 # def teardown_request():
 #     pass
+
 
 @bp.route('/politics')
 def politics():
@@ -61,8 +60,7 @@ def test():
 @bp.route('/')
 # @bp.route('/index')
 def index():    
-    return render_template("index.html")
-
+    return render_template("index.html", contact_form=ContactForm())
 
     
 from app.email import send_email
@@ -79,3 +77,36 @@ def send_mail():
     
     return 'Отправили 2 сообщения на почту админа, проверь'
 
+
+@bp.route('/subscribe', methods=['POST'])
+def subscribe():
+    subscribe_form=SubscribeForm()
+    if subscribe_form.validate():
+        return "Спасибо за подписку"
+    else:
+        return jsonify(subscribe_form.errors), 400
+    
+
+@bp.route('/contact', methods=['POST'])
+def contact():
+    contact_form=ContactForm()
+    if contact_form.validate():
+        print(contact_form.name.data, contact_form.email.data, contact_form.message.data)
+        return "Сообщение отправлено"
+    else:
+        return jsonify(contact_form.errors), 400
+    
+    
+@bp.route('/ip', methods=['GET'])  
+def get_ip():
+    ip = f"REMOTE_ADDR = {request.environ['REMOTE_ADDR']}"
+    ip = ip + f"<br>remote_addr = {request.remote_addr}"
+    ip = ip + f"<br>HTTP_X_REAL_IP = {request.environ.get('HTTP_X_REAL_IP', request.remote_addr)}"
+    ip = ip + f"<br>X-Forwarded-For = {request.environ.get('X-Forwarded-For', request.remote_addr)}"
+    ip = ip + f"<br>remote_addr = {request.remote_addr}"
+    
+    return ip
+    # if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+    #     print(request.environ['REMOTE_ADDR'])
+    # else:
+    #     print(request.environ['HTTP_X_FORWARDED_FOR'])

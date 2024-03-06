@@ -1,16 +1,22 @@
 import os
-from flask import Flask
+from flask import Flask, request, g
 from flask_login import LoginManager
 from flask_mail import Mail
 import logging
 from app import logger_set
 from config import Config
 from flask_paranoid import Paranoid
+from flask_login import AnonymousUserMixin
 
 mail = Mail()
 login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = ('Страница доступна только авторизованным пользователям')
+# мой параметр is_admin
+class Anonymous(AnonymousUserMixin):
+  def __init__(self):
+    self.is_admin = False
+login.anonymous_user = Anonymous
 
 def create_app(config_class=Config):
     
@@ -50,16 +56,28 @@ def create_app(config_class=Config):
     app.register_blueprint(api_bp, url_prefix='/api')
     
     from app.lk import bp as lk_bp
-    app.register_blueprint(lk_bp, url_prefix='/lk')      
+    app.register_blueprint(lk_bp, url_prefix='/lk')
     
-    from app.main.forms import SubscribeForm
+    from app.help import bp as help_bp
+    app.register_blueprint(help_bp, url_prefix='/help')
+    
+    from app.comments import bp as comments_bp
+    app.register_blueprint(comments_bp, url_prefix='/comments')
+    
     # то что будет в каждом шаблоне при рендеринге
+    from app.main.forms import SubscribeForm
     @app.context_processor
     def context_processor():
         return dict(subscribe_form=SubscribeForm())
     
-    app.logger.info('Приложение Flask_parser запущено')
+    # ip пользователя
+    @app.before_request
+    def before_request():
+        g.ip_address = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+        g.support_email = app.config['SUPPORT_EMAIL']
+        
     
+    app.logger.info('Приложение Flask_parser запущено')
     return app
 
 

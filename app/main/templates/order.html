@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+
+    <!--<div class="card border-info mb-3" id = "card_header" >
+        <div class="card-header border-info">
+            <h2 class="text-center">Информация по заказу </h2>
+        </div>
+        <div class="card-body">
+            <p class="text-center" id ="header"></p>
+        </div>
+
+        <div class="card-footer">
+            <p>
+                Есть вопросы? Напишите на почту
+                <i class="far fa-envelope" aria-hidden="true"></i> <a href="mailto:{{ g.support_email }}">{{ g.support_email }}</a>
+            </p>
+        </div>
+    </div>
+    -->
+    <div class="card border-info mb-3" id = "card_data" >
+        <div class="card-header border-info">
+            <h2 class="text-center" id="card_h">Информация по заказу {% if order.stop == 0 %} №{{ order.order_id }} от {{ order.order_date }}{% endif %} </h2>
+        </div>
+        {#}<?php if (AVITO_ERROR==1) echo AVITO_ERROR_MSG;?>{#}
+
+        <div class="card-body">
+            {% if order.stop == 1 %} 
+            <p class="text-center" id ="header">
+                {{ order.stop_header|safe }}
+            </p>
+            {% else %}
+
+            {#}<?php include_once(__DIR__.'/status_work.php'); echo '<div class="row"> <div class="col">'.get_status_work().' </div></div>';?>{#}
+            <!--
+            <div class="row" id ="div_mess_for_order"  >
+                <div class="col">
+                <div class="alert alert-warning" id ="mess_for_order" role="alert">
+                </div></div>
+            </div>
+            <div class="row" id ="div_admin_panel"  >
+                <div class="col">
+                <div class="alert alert-info" id ="admin_panel" role="alert">
+                </div></div>
+            </div>
+            <div class="row" id ="autoload_div"  >
+                <div class="col">
+                <div class="alert alert-info" id ="autoload_text" role="alert">
+                </div></div>
+            </div>
+            <div class="row" id ="div_queue_mess"  >
+                <div class="col">
+                <div class="alert alert-info" id ="queue_mess" role="alert">
+                </div></div>
+            </div>
+            -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Ссылки на объявления:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p id='p_url'>
+                        <a data-bs-toggle="collapse" href="#collapse_url" role="button" aria-expanded="false" aria-controls="collapse_url"> 
+                            <span id="t_url_short">
+                                {{ order.url_short }}...
+                            </span> 
+                            <i class="fas fa-chevron-down"></i> 
+                        </a>                            
+                    </p>                   
+                </div>
+            </div>
+            <div class="row">
+                <div class="collapse" id="collapse_url">
+                  <div class="card card-body" style="border:0px;">
+                    <p><span id="t_url">{{ order.url }}</span></p>
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Скачано объявлений:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span id="t_get_ads">000</span> </p>
+                </div>
+            </div>
+            <div id="div_no_ads" >
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Подходят для выгрузки:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span id="t_get_load_ads"></span> </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Исключены из выгрузки:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span id="t_get_no_ads"></span> </p>
+                </div>
+            </div></div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Статус работы:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span id="t_status">
+                        {{ order.status }}
+                    </span></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Файл с данными:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span id="t_xls_file">
+                        {% if order.status_id < 4 %}
+                            Пока не сформирован
+                        {% else %}
+                            <a class="underline purple_color" href="{{ order.xls_file }}">avito.xlsx</a> 
+                            {% if order.csv_file %}
+                                <br><a class="underline purple_color" href="{{ order.csv_file }}">avito.csv ({% if order.export_csv==1 %}win-1251{% else %}utf-8{% endif %})</a> 
+                                {% if order.csv_zip_file %}
+                                <br> csv в архиве <a class="underline purple_color"  href="{{order.csv_zip_file }}">avito.csv.zip</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </span></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Дополнительные фильтры:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span id="dop_func">{% if order.dopfields_name %}{{ order.dopfields_name|safe }}{% else %}Не заданы{% endif %}</span></p>
+                </div>
+            </div>
+            {% if order.parse_by_date%} 
+            <div  id="div_parse_by_date">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="blue-test">Парсить по дату:</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p><span id="parse_by_date">
+                            {{ order.parse_by_date }}                            
+                        </span></p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div  id="div_limit" >
+                <div class="row" >
+                    <div class="col-sm-6">
+                        <p class="blue-test">Лимит объявлений:</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p><span id="limit">
+                            {% if order.limit_count>0 %} 
+                            {{ order.limit_count }}
+                            {% else %}
+                            Не задано
+                            {% endif %}
+                        </span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="blue-test">Поля:</p>
+                </div>
+                <div class="col-sm-6">
+                    <p id="p_field_str">
+                        <a data-bs-toggle="collapse" href="#collapsefield" role="button" aria-expanded="false" aria-controls="collapsefield"> 
+                            <span id="t_url_short">
+                                {{ order.fields_name_short }} ...
+                            </span> 
+                            <i class="fas fa-chevron-down"></i> 
+                        </a>   
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="collapse" id="collapsefield">
+                  <div class="card card-body" style="border:0px;">
+                    <p><span id="field_str">
+                        {{ order.fields_name }}
+                    </span></p>
+                  </div>
+                </div>
+            </div>
+            <p></p>
+
+            <div class="progress" >
+                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" id ="progressbar2" role="progressbar" style="width: 25%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Выполнение заказа</div>
+            </div>
+            <p></p>
+            <div class="progress" id ="progress_ads" >
+                <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" id ="progressbar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Объявлений скачано</div>
+            </div>
+            <p></p>
+            <div id='msg_div' >
+                    <div class="alert alert-success alert-dismissible" id ='msg_text' role="alert"></div>
+            </div>
+
+            <div id='price_comm' >
+                <p>Внимание! Файлы с данными хранятся на сервере не более <?php echo $store_day_files;?> дней.</p>
+            </div>
+            
+            {% endif %}
+        </div> <!-- body-->
+        <div class="card-footer">
+            <p>
+                Нашли ошибку в заказе? Хотите что-то улучшить? Напишите нам
+                <i class="far fa-envelope" aria-hidden="true"></i>
+                <a href="{{ g.support_email }}">{{ g.support_email }}</a>
+            </p>
+        </div>
+    </div><!--div class="card-->
+</div><!--class="container"-->
+{% endblock %}
+
+{% block content_js %}
+<!--
+<script>{# задаем переменные, которые нужны в js файлах #}    
+    const fetch_block_free_url = "{{ url_for('main.free_order') }}";
+</script>-->
+
+<script src="{{ url_for('main.static', filename='js/order.js') }}"></script>
+
+{% endblock %}

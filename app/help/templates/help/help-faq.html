@@ -1,0 +1,17 @@
+
+<h3 class="text-center">FAQ. Вопросы и ответы</h3>
+<div class="row">
+    <div class="col">
+        <div class="accordion" id="accordion_faq">
+            {% if faqs %}
+            {% for faq in faqs %}
+            {% include 'help/_faq_one.html' %}
+            {% endfor %} 
+            {% endif %} 
+        </div>
+    </div>
+</div>
+<hr>
+<p>
+    Если у Вас остались вопросы, то напишите нам на почту <a href="mailto:{{ g.support_email}}">{{ g.support_email}}</a>, постараемся добавить новую инструкцию.
+</p>

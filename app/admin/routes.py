@@ -1,7 +1,7 @@
 from flask import render_template, redirect,  abort, flash, url_for, request, current_app
 from flask_login import current_user, login_required
 from app.admin import bp
-from app.util import admin_required
+from app.utils import admin_required
 from app.main.models import Query_db
 
 @bp.route('/', methods=['GET'])
@@ -113,27 +113,6 @@ def get_user_orders_data(user_id):
         return {'data': users['data'], 'total': users['total']}
     
     return {'data': None, 'total': 0}
-
-
-# @bp.route('/test', methods=['GET'])
-# @admin_required
-# def test():
-#     return render_template('admin/test.html') 
-
-# @bp.route('/users_data1', methods=['GET', 'POST'])
-# @admin_required
-# def users_data1():
-#     start = request.args.get('start', type=int, default=-1)
-#     length = request.args.get('length', type=int, default=-1)
-#     sort = request.args.get('sort', type=str, default='')
-#     search = request.args.get('search', type=str, default='')
-    
-#     users = Query_db().get_users1(offset=start, limit=length, sort=sort, search=search)
-    
-#     if users and 'data' in users and users['data']:
-#         return {'data': users['data'], 'total': users['total']}
-    
-#     return {'data': None, 'total': 0}
 
 
 @bp.route('/user_payments/<user_id>', methods=['GET'])

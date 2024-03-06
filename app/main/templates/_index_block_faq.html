@@ -1,0 +1,28 @@
+
+{% if faqs %}
+<section id = "block_faq">
+    <div class="container">
+        <div class="row work-head text-center">
+            <div class="col">
+                <h2>Часто задаваемые вопросы</h2>
+            </div>
+        </div>
+        <div class="row faq">
+            <div class="col">
+                <div class="accordion" id="accordion_faq">                    
+                    {% for faq in faqs %}
+                    {% include 'help/_faq_one.html' %}
+                    {% endfor %} 
+                </div>
+            </div>
+        </div>    
+        <div class="row work-head text-center">
+            <div class="col">
+                <div class="section-btn">
+                    <a href="{{ url_for('help.block', active_block='faq') }}" class="btn btn-primary">Еще ответы</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %} 

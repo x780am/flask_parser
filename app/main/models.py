@@ -1,7 +1,10 @@
+import jwt
+import time 
 from flask_login import current_user
 from app.sql import MySql as mysql
-
+from app.utils import get_now_unix
 from flask import current_app, url_for
+from app.main import json_data 
 
 
 class Query_db():
@@ -338,9 +341,269 @@ class Query_db():
         else:
             return 404
         
+class Contact():
+    def set_contact_data(name, email, message, ip):
+        with mysql() as db:
+            select_result = db.insert('contact', {'email': email, 'text': message, 'name': name, 'ip': ip})
+            if not db.error:
+                current_app.logger.info(f"Добавлен вопрос от клиента в БД с id={select_result}")
+            else:
+                current_app.logger.critical(f"Ошибка при добавлении вопроса от клиента в БД: {db.error}")                
+        return True
+    
+class Subscribe():
+    def set_subscribe_data(email, ip):
+        with mysql() as db:
+            select_result = db.insert('sign', {'email': email, 'ip': ip})
+            if not db.error:
+                current_app.logger.info(f"Добавлена новая подписка в БД с id={select_result}")              
+            else:
+                current_app.logger.critical(f"Ошибка при добавлении подписка в БД: {db.error}")
+        return True
+    
+
+class Parser_data():
+    """
+    Класс с настройками и данными о парсере
+    """
+    def get_status_work(self):
+        """
+        Получить статус работы парсера и БД
+        Вернется: dict(status='', status_text='')
+        Пример:
+        from app.main.models import Parser_data
+        status_work = Parser_data().get_status_work()
+        """
+        with mysql() as db:
+            select_db_work = db.select_one(f"SELECT status, msg FROM `db_work`", {})
+            # print(select_db_work)
+            if db.error:
+                current_app.logger.critical(f"[Parser_data.get_status_work] Ошибка при запросе статуса БД: {db.error}")
+                return dict(status='', status_text='')
+            # 0 - не работает
+            if select_db_work["status"] == 0:
+                status = "danger"
+                status_text = select_db_work["msg"] if select_db_work["msg"] else "Парсер временно не работает"
+                return dict(status=status, status_text=status_text)
+            
+            select_cron = db.select_one(f"SELECT stop FROM `cron` where name='new'", {})
+            if db.error:
+                current_app.logger.critical(f"[Parser_data.get_status_work] Ошибка при запросе статуса работы: {db.error}")
+                return dict(status='', status_text='')
+            if 'stop' in select_cron and select_cron['stop'] == 1:
+                status = "warning"
+                status_text = "Новые заказы временно не принимаются!"
+                return dict(status=status, status_text=status_text)
+              
+            select_result = db.select_one(f"select status_text, status from status_work where active=1", {})
+            if db.error:
+                current_app.logger.critical(f"[Parser_data.get_status_work] Ошибка при запросе статуса работы: {db.error}")
+                return dict(status='', status_text='')
+            if select_result and "status" in select_result and select_result["status"]:
+                status = select_result["status"]
+                status_text = select_result["status_text"]
+                return dict(status=status, status_text=status_text)   
+            else:
+                return dict(status='', status_text='')        
+        return dict(status='', status_text='')
+    
+    def get_price(self):
+        price = float(current_app.config["PRICE"])
+        price_kop = round(price*100)
+        return dict(price_rub=price, price_kop=price_kop)
+    
+
+class Order():
+    """
+    Класс для работы с заказом
+    """
+    def __init__(self, id=None, token=None):
+        if token:
+            self.id = self.get_id_by_token(token)
+        if id:
+            self.id = id
+    
+    def id(self):
+        return self.id
         
-       
         
+    def _get_data_in_db(self):
+        with mysql() as db:
+            sql = 'SELECT l.hash, l.get_ads, l.del_ads, l.all_ads, l.rezume, l.pay_ads, l.pars_ads, l.old_ads, l.old_phone as cnt_old_phone,'\
+                        'l.no_phone_ads, l.anonym_ads, l.dubl_phone, l.error_ads, l.need_pars_seller, l.check_del,'\
+                        'l.run, l.stop_negative_balance, l.cancel_order,'\
+                        'o.email, o.get_statistic,'\
+                        'o.url as user_url, o.free,'\
+                        'o.user_id, ifnull(u.ban,0) as ban, o.new2020, o.count_real,'\
+                        'o.autoload_id, o.only_with_phone, o.date_pay, '\
+                        'l.order_id, l.url, l.status_id, s.name as status, l.xls_file,l.csv_file,l.csv_zip_file,'\
+                        'o.vip, o.fields, o.limit_count, o.export_csv,'\
+                        'o.phone_anonym, o.only_new, o.save_tag, o.param_in_col, o.phone_dubli, o.ads_dubli, o.seller_dubli, o.local_priority, o.only_new_phone,'\
+                        'ifnull(o.parse_by_date,"") as parse_by_date, o.get_seller_data, date(o.date) as order_date, o.work as order_work,'\
+                        'DATE_ADD(stop_negative_balance_date, INTERVAL 24 hour) as negative_hours_left,'\
+                        '(case when ifnull(o.parse_by_date,"")="" then 0 else o.count_all_bez_limit end) as count_all_bez_limit'\
+                    ' FROM `log` l inner join `status` s on s.id=l.status_id '\
+                    ' inner join `order` o on o.id=l.order_id '\
+                    ' left join `users` u on o.user_id=u.id '\
+                    f' where o.id=%(id)s'
+                
+            select_order = db.select_one(sql, {'id': self.id})
+            if db.error:
+                current_app.logger.critical(f"[Order._get_data_in_db] Ошибка при запросе: {db.error}")
+                return None
+            return select_order
+    
+    def get_data(self):
+        """
+        Данные о заказе
+        Order(id=338145).get_data()
+        Вернет: словарь данных
+        """
+            
+        if not self.id:
+            current_app.logger.critical(f"[Order.get_data] Не задан id заказа")
+            return None
         
-      
- 
+        #********** получаем данные из БД **********
+        select_order = self._get_data_in_db()
+        if not select_order:
+            current_app.logger.critical(f"[Order.get_data] пустой ответ из БД")
+            return None
+        
+        print(f'select_order={select_order}')
+        return_data = dict()
+        
+        #********** вывод заголовков с ошибками **********
+        if not select_order:
+            return dict(stop=1, stop_header=json_data.get_order_header_none())
+            
+        if select_order["ban"] == 1:
+            return dict(stop=1, stop_header=json_data.get_order_header_ban())  
+         
+        return_data["stop"] = 0
+        return_data["stop_header"] = ""         
+        
+        #********** названия полей текстом **********
+        dopfields_name = ""
+        return_data["fields_name"] = json_data.field_name_by_id(fields_id=select_order["fields"]) 
+        dopfields_name_set = json_data.get_dopfields_name()
+        for key, value in select_order.items():                
+            if key in dopfields_name_set:
+                if value == 1:
+                    if dopfields_name:
+                        dopfields_name = dopfields_name + '<br>' + dopfields_name_set[key]
+                    else:
+                        dopfields_name = dopfields_name_set[key]
+        return_data["dopfields_name"] = dopfields_name        
+        
+        #********** поля **********
+        return_data["url"] = select_order["url"]
+        return_data["status_id"] = select_order["status_id"]
+        return_data["limit_count"] = select_order["limit_count"]
+        return_data["order_date"] = select_order["order_date"]
+        return_data["order_id"] = select_order["order_id"]
+        return_data["status"] = select_order["status"]
+        return_data["export_csv"] = select_order["export_csv"]
+        return_data["parse_by_date"] = select_order["parse_by_date"]
+        
+        # пока не применила
+        return_data["count_all_bez_limit"] = select_order["count_all_bez_limit"]
+        return_data["seller_dubli_count"] = select_order["seller_dubli_count"]
+        return_data["cnt_old_phone"] = select_order["cnt_old_phone"]
+        return_data["old_ads"] = select_order["old_ads"]
+        return_data["free"] = select_order["free"]
+        return_data["old_ads"] = select_order["old_ads"]
+        return_data["get_ads"] = select_order["all_ads_pars"] # всего = сумма скачено + без номеров и т.д.
+        return_data["all_ads"] = select_order["pay_ads"] # всего оплачено
+        return_data["load_ads"] = select_order["load_ads"] # выгружено в файл Подходят для выгрузки                
+        
+        return_data["url_short"] = return_data["url"][0:80]
+        return_data["fields_name_short"] = return_data["fields_name"][0:80]
+            
+        
+        #********** добавим .'?1709718949 чтоб не кешировался файл ********** 
+        for key, value in select_order.items():     
+            if key in ["xls_file", "csv_file", "csv_zip_file"] and value:
+                return_data[key] = f"{value}?{get_now_unix()}"
+        """        
+        # если выбрано парсить и без телефона, то не будем показывать что есть ошибки
+        if select_order["only_with_phone"] == 0 and select_order["no_phone_ads"] > 0:
+            return_data["no_phone_ads"] = 0
+        else:
+            return_data["no_phone_ads"] = select_order["no_phone_ads"]
+          
+        # если нужно парсить продавцов, то из общего числа спаршенный объявлений вычтем те что без продавцов
+        if select_order["get_seller_data"] == 1:
+            return_data["get_ads"] = select_order["get_ads"] - select_order["need_pars_seller"]
+        
+        # если заказ завершен, то построим все от количества выгруженных
+        if select_order["order_work"] == 3:
+            # сколько выгружено - это известно точно
+            return_data["load_ads"] = select_order["count_real"]
+            if select_order["seller_dubli"] == 1:
+                if select_order["limit_count"] > 0:
+                    seller_dubli_count = select_order["pay_ads"] - (select_order["load_ads"] + select_order["old_ads"] 
+                                                                    + select_order["anonym_ads"] + select_order["dubl_phone"] 
+                                                                    + select_order["cnt_old_phone"] + select_order["no_phone_ads"])
+                else:
+                    seller_dubli_count = select_order["get_ads"] - select_order["count_real"]  # 14 марта 2023 до этого было $seller_dubli_count=0;
+        else:
+            # а может $all_ads_pars = $all_ads_pars - но не всегда работает, особо плохо при резюме
+            all_ads_pars = select_order["get_ads"] + select_order["no_phone_ads"] + select_order["old_ads"]
+            select_order["load_ads"]  = select_order["get_ads"] - select_order["anonym_ads"]- select_order["dubl_phone"] - select_order["cnt_old_phone"]
+            if select_order["load_ads"] < 0:
+                select_order["load_ads"]  = 0
+
+            if select_order["seller_dubli"] and select_order["xls_file"] != '':
+                new_0 = 0
+                # $auth_data = $db->select("SELECT count(id) as cnt from z_ads_$order_id where new=0 ", array());
+                # if (isset($auth_data[0]))
+                #     $new_0 = $auth_data[0]['cnt'];
+                # seller_dubli_count = $new_0 - $load_ads;
+                # $all_ads_pars = $all_ads_pars + seller_dubli_count;
+            
+            else:
+                seller_dubli_count=0                    
+        """  
+        if select_order["parse_by_date"] and select_order["count_all_bez_limit"] > 0 and select_order["order_work"] < 3:                
+            if mess_for_order !='':
+                mess_for_order = mess_for_order + '<br>'
+            mess_for_order = mess_for_order + f"По заказу будет обработано {select_order['count_all_bez_limit']}"\
+                    f" объявлений, чтобы спарсить только объявления по дату {select_order['parse_by_date']}. Это займет какое-то время."\
+                    f" Ожидаемое кол-во объявлений {select_order['pay_ads']}, точное значение будет известно только после парсинга."
+            mess_show = 1
+
+        if select_order["stop_negative_balance"] == 1 and select_order["order_work"] < 3:
+            queue_mess ='Заказ остановлен, так как на вашем балансе отрицательная сумма. '\
+                    'Пополните баланс аккаунта и заказ запустится автоматически, в противном '\
+                    f'случае заказ будет отменен {select_order["negative_hours_left"]}.'
+        
+        seller_dubli_count = 0
+        return_data["seller_dubli_count"] = seller_dubli_count
+        queue_mess = ""
+        return_data["queue_mess"] = queue_mess
+        admin_panel = ''
+        return_data["admin_panel"] = admin_panel
+        mess_show = ''
+        return_data["mess_show"] = mess_show
+        mess_for_order = ''
+        return_data["mess_for_order"] = mess_for_order
+        return return_data
+        
+   
+    # сгенерировать токен jwt 
+    def get_order_token(self):
+        return jwt.encode({'id': self.id},
+                            current_app.config['SECRET_KEY'], 
+                            algorithm='HS256')
+    
+    # проверка токета jwt
+    # статический метод, что означает, что его можно вызывать непосредственно из класса
+    @staticmethod
+    def get_id_by_token(token):
+        try:
+            id = int(jwt.decode(token, current_app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['id'])
+        except:
+            return None 
+        return id

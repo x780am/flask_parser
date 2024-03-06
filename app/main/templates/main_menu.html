@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md fixed-top"> 
   <div class="container">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">
       <img src="{{ url_for('main.static', filename='img/favicon.ico') }}" alt="parser24" width="30" height="30" class="d-inline-block align-text-top">
       PARSER24</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_menu" aria-controls="navbar_menu" aria-expanded="false" aria-label="Меню">
@@ -19,12 +19,12 @@
           </a>
         </li>
         <li class="nav-item ">
-          <a class="nav-link {% if request.endpoint=='main.comments' %}active{%endif %}" href="{{ url_for('main.comments') }}">
+          <a class="nav-link {% if request.endpoint=='comments.index' %}active{%endif %}" href="{{ url_for('comments.index') }}">
             Отзывы
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.endpoint=='main.help' %}active{%endif %}" href="{{ url_for('main.help') }}">
+          <a class="nav-link {% if request.endpoint=='help.block' %}active{%endif %}" href="{{ url_for('help.block', active_block='how_use') }}">
             Помощь
           </a>
         </li>
@@ -93,5 +93,4 @@
       
     </div>
   </div>
-</nav> 
-      
+</nav>   

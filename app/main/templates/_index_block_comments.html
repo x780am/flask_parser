@@ -1,0 +1,22 @@
+
+{% if comments %}
+<section id = "block_comments_main">
+    <div class="container">
+        <div class="row work-head text-center">
+            <div class="col comments-header ">
+                <h2>ПОЧИТАЙТЕ, ЧТО О НАС ПИШУТ</h2>
+            </div>
+        </div>
+        <div class="comments-body">
+            {% for comment in comments %} 
+                {% include 'comments/_comment.html' %}            
+            {% endfor %}  
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <a href="comments" class="btn btn-primary primary_blue">Больше отзывов</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}

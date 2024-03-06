@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section id ="block_comments">
+    <div class="container">
+            <div class="row text-center">
+                <div class="col comments-header ">
+                    <h2>ПОЧИТАЙТЕ, ЧТО О НАС ПИШУТ</h2>
+                </div>
+            </div>
+            <div class="row">                
+                <div class="col">
+                    <div class="accordion" id="add_comment">
+                        <div class="accordion-item" style="border-bottom-width: 0px;border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;">
+                            <p class="accordion-header" id="headingTwo" >
+                                <button class="btn btn-primary" style="width: 100%" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <i class="fa fa-plus"></i> Добавить отзыв
+                                </button>
+                            </p>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#add_comment">
+                                <div class="accordion-body">
+                                    <div class="card card-body">
+                                        <form id="commentAdd_form" method="POST">
+                                            <div class="text-center row"><h2 class="col" >Ваше мнение важно для нас</h2></div>
+                                                {{ commentAdd_form.csrf_token }}
+                                                <div class="text-danger my-2" id="csrf_token-error">
+                                                </div>
+                                                <div class="form-group row">                      
+                                                    {{ commentAdd_form.name.label(class='col-md-2 col-form-label') }}
+                                                    <div class="col-md-10">
+                                                        {{ commentAdd_form.name(class='form-control') }}
+                                                        <div id="name-error" class="invalid-feedback"></div>
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group row">                      
+                                                    {{ commentAdd_form.email.label(class='col-md-2 col-form-label') }}
+                                                    <div class="col-md-10">                                                        
+                                                        {{ commentAdd_form.email(class='form-control') }}
+                                                        <div id="email-error" class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>   
+                                                <div class="form-group row">                      
+                                                    {{ commentAdd_form.message.label(class='col-md-2 col-form-label') }}
+                                                    <div class="col-md-10">
+                                                        {{ commentAdd_form.message(class='form-control') }}
+                                                        <div id="message-error" class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>        
+                                                <div class="form-group row">   
+                                                    <div class="col text-center">          
+                                                        {{ commentAdd_form.submit(class='btn btn-primary') }}
+                                                    </div> 
+                                                </div>
+                                                <div class="form-group row">
+                                                    <small class="form-text text-muted " style="text-align: center; margin: 0 auto;" >
+                                                       Нажимая на кнопку, вы даете согласие на <a style="font-size: 80%; font-weight: 400;color:black;" href="{{ url_for('main.politics')}}" target="_blank" rel="nofollow">обработку персональных данных</a> и
+                                                       принимаете условия <a style="font-size: 80%; font-weight: 400;color:black;" href="{{ url_for('main.static', filename='/files/oferta.pdf') }}" rel="nofollow" target="_blank">пользовательского соглашения.</a>
+                                                    </small>
+                                                </div>  
+                                        </form>
+                                        <div class="alert alert-success" style="display: none; margin-bottom: 0px;" id="commentAdd_form_successmessage" role="alert"></div>    
+                                    </div>                                       
+                                </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if comments %}
+            <div class="comments-body" >
+                {% for comment in comments %}
+                    {% if current_user.is_admin or comment.public %}
+                        {% include 'comments/_comment.html' %}
+                    {% endif %}  
+                {% endfor %}    
+            </div>
+            <nav >
+                <ul class="pagination justify-content-center">
+                    <li class="page-item {% if not prev_url %} disabled{% endif %}">
+                        <a class="page-link" href="{{ prev_url }}">Назад</a>
+                    </li>
+                    <li class="page-item {% if not next_url %} disabled{% endif %}">
+                        <a class="page-link" href="{{ next_url }}">Вперед</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="EditCommentModal" tabindex="-1" aria-labelledby="EditCommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center" style="text-align: center;" id="EditCommentModalLabel">Изменение отзыва</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id ='EditComment_form' method="POST">
+                {{ EditComment_form.csrf_token }}
+                <div class="text-danger my-2" id="csrf_token-error">
+                </div>
+                <div class="input-group">                      
+                    {{ EditComment_form.text(class='form-control', rows="5") }}
+                    <div id="text-error" class="invalid-feedback"></div>
+                </div>    
+                <div class="input-group">                      
+                    {{ EditComment_form.id(class='form-control') }}
+                    <div id="id-error" class="invalid-feedback"></div>
+                </div>     
+                <div class="input-group">                      
+                    {{ EditComment_form.answer(class='form-control') }}
+                    <div id="answer-error" class="invalid-feedback"></div>
+                </div>             
+                <div class="form-group row">                      
+                    <div class="col-md-10">                                                        
+                        {{ EditComment_form.email(class='form-control') }}
+                        <div id="email-error" class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="form-group row">                      
+                    <div class="col-md-10">                                                        
+                        {{ EditComment_form.comment_text(class='form-control') }}
+                        <div id="comment_text-error" class="invalid-feedback"></div>
+                    </div>
+                </div> 
+                <div class="text-center">                      
+                    {{ EditComment_form.submit(class='btn btn-primary') }}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </form>   
+        </div>
+        
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block content_js %}
+<script>{# задаем переменные, которые нужны в js файлах #}    
+    const fetch_comments_answer_url = "{{ url_for('comments.answer') }}";
+    const fetch_comments_edit_url = "{{ url_for('comments.edit') }}";
+    const fetch_comments_delete_url = '{{ url_for("comments.delete") }}';
+    const fetch_comments_public_url = '{{ url_for("comments.public") }}';
+    const fetch_comments_add_url = '{{ url_for("comments.add") }}';
+</script>
+<script src="{{ url_for('comments.static', filename='js/comments.js') }}"></script>
+{% endblock %}

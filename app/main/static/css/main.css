@@ -1,21 +1,24 @@
-
-
 html, body{
 	height: 100%;
 }
+.container-fluid{
+    padding: 0px 0px ; 
+}
+
 body {
   background: #fff;
-  font-family: Ubuntu, sans-serif;
+  /*font-family: euclid_flex, Roboto, Helvetica, Arial, sans-serif;*/
+  font-family: Montserrat, sans-serif;
+  /*font-family: Ubuntu, sans-serif;*/
   font-size: 17px;
   color:  #434c59; /*цвет текста*/
   font-weight: 400;
   min-width: 320px;
-
 }
 
 /*ссылки*/
 a{
-    font-family: Montserrat, sans-serif;
+    /*font-family: Montserrat, sans-serif;*/
     font-weight: 400;
     font-size: 17px;
     color: #458cca;
@@ -28,7 +31,6 @@ a:hover{
 .underline{
      text-decoration: underline;
 }
-
 
 .purple_color{
     color: #a169f7;
@@ -56,22 +58,24 @@ a:hover{
         color: #ffc107;
     }
     
-    #header .btn, 
     #footer .btn, 
     #block_contact .btn, 
     #block_work .btn, 
-    #block_polya .btn
+    #block_polya .btn, 
+    #block_comments_main .btn,
+    #block_faq .btn,
+    #block_free .btn
     {
-        font-family: Montserrat, sans-serif;
         font-size: 18px;
         text-transform:uppercase;
         padding:10px 20px; 
-        margin:0px 20px ;
+        margin: 5px 20px ;
         transition:background .5s;
         width: 350px;
     } 
     /*для формы логин не надо отступ*/
-    #section_login .btn, #section_pay_add .btn{
+    #section_login .btn, 
+    #section_pay_add .btn{
         margin-left: 0px;
     }
     .btn-outline-success{
@@ -117,8 +121,7 @@ a:hover{
         color: #000;
         padding: 10px 10px; /*отступ от текста*/
         margin: 5px 10px ;/*отступ наружние*/
-    }
-    
+    }    
     .btn-success{
         background: #97cf26;
         border-color: #97cf26;
@@ -126,7 +129,6 @@ a:hover{
         padding: 10px 10px;
         margin: 5px 10px ;
     }
-
     p{
         word-break: break-word;
     }

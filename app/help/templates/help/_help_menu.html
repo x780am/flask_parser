@@ -1,0 +1,7 @@
+<li class="nav-item">
+    <a class="nav-link {% if block_data.show%}active show{%endif %}"
+        id="{{ block_data.id }}-tab" data-toggle="pill" href="{{ url_for('help.block', active_block=block_data.id) }}" 
+        role="tab" aria-controls="{{ block_data.id }}" aria-selected="false">
+        {{ block_data.name }}
+    </a>
+</li>

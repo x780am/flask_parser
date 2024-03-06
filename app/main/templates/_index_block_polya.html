@@ -1,0 +1,134 @@
+
+<section id = "block_polya">
+    <div class="container">
+        <div class="row free-polya text-center">
+            <div class="col">
+                <h2>
+                    Список полей для выгрузки
+                </h2>
+            </div>
+        </div>
+        <div class="row polya ">
+            <div class="col-md-6">
+
+                <ul class="list-unstyled">
+
+                    <!--li>
+                        <i class="fa fa-check-circle"></i>  Телефон объявления
+                    </li-->
+                    <li>
+                        <i class="fa fa-check-circle"></i> Продавец
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Заголовок объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Описание объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Цена объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Город, район, метро, адрес
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Категория, подкатегория объявления
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="fa fa-check-circle"></i> Ссылка на объявление
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Дата добавления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Кол-во просмотров
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Номер объявления
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Ссылки на изображения
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Координаты объявления
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row free-polya text-center">
+            <div class="col">
+                <h5>
+                    Дополнительные поля
+                </h5>
+            </div>
+        </div>
+        <div class="row polya ">
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                  <li>
+                        <i class="fa fa-check-circle"></i> Количество активных/завершенных, кол-во доставок, возможность написать сообщение, дата регистрации, рейтинг, кол-во отзывов продавца
+                    </li>   
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="fa fa-check-circle"></i> Комиссия,% (Аренда)
+                    </li>
+                     <li>
+                        <i class="fa fa-check-circle"></i> Платные услуги объявления, доставка, снижение цены
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row free-polya text-center">
+            <div class="col">
+                <h5>
+                    Специальные возможности
+                </h5>
+            </div>
+        </div>
+        <div class="row polya ">
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="fa fa-check-circle"></i> Сохранять html разметку в описании
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Разбить параметры объявления по столбцам
+                        <a class="underline" href="{{ url_for('help.block', active_block='param-in-col') }}" target="_blank"><img src="{{ url_for('main.static', filename='/img/help/help-icon.png') }}" width="16" height="16" alt="Что это?"></a>
+                    </li>
+                   <li>
+                        <i class="fa fa-check-circle"></i> Парсить объявления продавца
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="fa fa-check-circle"></i> Платить только за уникальные объявления
+                        <a class="underline" href="{{ url_for('help.block', active_block='dubli_ads') }}" target="_blank"><img src="{{ url_for('main.static', filename='/img/help/help-icon.png') }}" width="16" height="16" alt="Что это?"></a>
+                    </li>
+                    <li>
+                        <i class="fa fa-check-circle"></i> Скачивать только новые объявления
+                        <a class="underline" href="{{ url_for('help.block', active_block='only_new') }}" target="_blank"><img src="{{ url_for('main.static', filename='/img/help/help-icon.png') }}" width="16" height="16" alt="Что это?"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row polya-footer text-center">
+            <div class="container">
+                <div class="col">
+                    <img class="img-responsive" src="{{ url_for('main.static', filename='/img/avito-example.jpg') }}" alt ='парсер объявлений' title="Пример парсинга данных" style="width: 100%">
+                    <div class="section-btn">
+                        <a href="{{ url_for('main.static', filename='/files/avito-example.xlsx') }}"  rel="nofollow" class="btn btn-primary">Скачать пример файла</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

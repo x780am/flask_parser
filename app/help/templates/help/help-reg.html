@@ -1,0 +1,21 @@
+<h3 class="text-center" >Как зарегистрироваться</h3>
+<ol>
+    <li>Переидите на страницу регистрвции <a class="underline" href="{{ url_for('auth.register')}}" target="_blank">"Регистрация"</a>
+    </li>
+    <li>Введите Email, пароль и нажмите кнопку "Зарегистрироваться".
+        <img src="{{ url_for('help.static', filename='/img/help-reg_1.jpg') }}" >
+    </li>
+    <li>После регистрации нужно подтвердить свой email.
+        <img src="{{ url_for('help.static', filename='/img/help-reg_2.jpg') }}" >
+    </li>
+    <li>Если вы введете верный проверочный код, то попадете на сайт как зарегистрированный пользователь.
+        В меню появятся ваш баланс и дополнительные функции.
+        <img src="{{ url_for('help.static', filename='/img/help-reg_3.jpg') }}" >
+    </li>
+</ol>
+
+<br>
+<hr>
+<p>
+    Если у Вас остались вопросы, то напишите нам на почту <a href="mailto:{{ g.support_email}}">{{ g.support_email}}</a>, постараемся добавить новую инструкцию.
+</p>

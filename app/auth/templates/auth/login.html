@@ -2,11 +2,13 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
-    <h1>Войти</h1>
-    {{ wtf.quick_form(form) }}
-    <p>Новый пользователь? <a href="{{ url_for('auth.register') }}">Зарегистрироваться!</a></p>
-    <p>
-        Забыли пароль?
-        <a href="{{ url_for('auth.reset_password_request') }}">Сбросить пароль</a>
-    </p>
+    <div class="container">
+        <h1>Войти</h1>
+        {{ wtf.quick_form(form) }}
+        <p>Новый пользователь? <a href="{{ url_for('auth.register') }}">Зарегистрироваться!</a></p>
+        <p>
+            Забыли пароль?
+            <a href="{{ url_for('auth.reset_password_request') }}">Сбросить пароль</a>
+        </p>
+    </div>
 {% endblock %}

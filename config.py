@@ -6,6 +6,7 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') 
+    SECRET_KEY_ORDER = '56165165165jghkhg'
         
     ###  Настройка БД  ###
     MYSQL_HOST = os.environ.get('MYSQL_HOST')
@@ -25,9 +26,14 @@ class Config:
     
     ADMIN = os.environ.get('ADMIN_EMAIL')
     ADMINS = [os.environ.get('ADMIN_EMAIL')]
+    
+    SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL')
+    
+    PRICE = os.environ.get('PRICE')
        
     # количество элементов на странице
     USERS_PER_PAGE = 10
+    COMMENTS_PER_PAGE = 5
     
     # защита от атак    
     # Secure ограничивает файлы cookie только трафиком HTTPS.

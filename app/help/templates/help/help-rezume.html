@@ -1,0 +1,41 @@
+<h3 class="text-center" >Парсинг резюме</h3>
+<ol>
+    <li>Зайдите на сайт <a class="underline" rel="nofollow" href="https://avito.ru" target="_blank">avito.ru</a>, выберите нужный город, категорию резюме и параметры (пол, возраст и др.).</li>
+    <li>Нажимаете кнопку "Найти" и затем скопируйте ссылку из браузера.
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_1.jpg') }}" style="width:100%">
+    </li>
+    <li>Вставьте скопированную ссылку в <a class="underline" href="{{ url_for('main.parser') }}" target="_blank">парсер</a> и нажмите кнопку "Рассчитать стоимость".
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_2.jpg') }}" style="width:100%">
+    </li>
+    <li>Через минуту Вы увидите количество объявлений и стоимость заказа.
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_3.jpg') }}" >
+    </li>
+    <li>Введите email, на который хотите получить данные и информацию по заказу.
+        <br><img src="{{ url_for('help.static', filename='/img/help-how-use_4.jpg') }}" >
+    </li>
+    <li>Выберите нужные параметры (например, парсить только уникальные номера).
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_4.jpg') }}" >
+    </li>
+    <li>Выберите способ оплаты.
+        <br><img src="{{ url_for('help.static', filename='/img/help-how-use_5.jpg') }}" >
+    </li>
+    <li>Нажмите кнопку "Оплатить заказ". Затем появится форма с заказом, проверьте данные и назмите "Перейти к оплате".
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_5.jpg') }}">
+    </li>
+    <li>После оплаты начнется сбор данных.
+    На указанную Вами почту придет письмо с ссылкой на информацию по заказу и ход его выполнения.
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_6.jpg') }}" >
+    </li>
+    <li>Так как заранее не известно сколько будет скачано резюме с номерами, то изначально оплата будет за все объявления, а после парсинга данные пересчитаются и деньги вернуться на внутренниий счет.
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_7.jpg') }}" >
+    </li>
+    <li>По окончании сбора, файлы в формате Excel и CSV будут доступны для скачивания.<br>
+        Пример файла:
+        <br><img src="{{ url_for('help.static', filename='/img/help-rezume_8.jpg') }}" ></li>
+</ol>
+
+<br>
+<hr>
+<p>
+    Если у Вас остались вопросы, то напишите нам на почту <a href="mailto:{{ g.support_email}}">{{ g.support_email}}</a>, постараемся добавить новую инструкцию.
+</p>

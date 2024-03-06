@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Заказ на Parser24.online</title>
+    </head>
+    <body>
+        {% block content_email %}
+        {% endblock %}
+        {% if not admin %}
+        <br><hr>
+        <p>Пожалуйста, не отвечайте на это письмо, это автоматическое уведомление.</p>
+        <p>С уважением, команда сервиса Parser24.online</p>
+        {% endif %}    
+    </body>
+</html>

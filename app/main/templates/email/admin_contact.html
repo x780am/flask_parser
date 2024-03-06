@@ -1,0 +1,10 @@
+{% extends "email/base_email.html" %}
+
+{% block content_email %}
+
+<p>Пришел вопрос от клиента:</p>
+<p>Имя: {{ name }}</p>
+<p>Email: {{ email }}</p>
+<p>Сообщение: {{ message }}</p>
+
+{% endblock %}

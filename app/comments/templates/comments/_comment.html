@@ -1,0 +1,47 @@
+    <div class="row">
+        <div class="col-1">
+            <img class="img-sm" alt="Профиль пользователя" src="{{ url_for('main.static', filename='/img/user.png') }}">
+        </div>
+        <div class="col">
+            <div class="mar-btm">
+                <p class="text-semibold box-inline" style="margin-bottom: 0px;"><b>{{ comment.user_name }}</b></p>
+                <p class="text-muted text-sm" ><i class="far fa-envelope" aria-hidden="true"></i> {% if current_user.is_admin %}{{ comment.user_email }}{% else %}{{ comment.user_email_public }}{% endif%}<br>
+                <i class="far fa-clock"></i> {{ comment.user_date }}</p>
+            </div>
+            <p id='comment_text_{{ comment.id}}'>{{ comment.text }}</p> 
+            {% if current_user.is_admin and not comment.public_view %}
+                {% if not comment.public %} 
+                <button type="button" class="btn-sm btn-default btn-hover-primary" onclick="public_comment({{ comment.id }}, 1);"><i class="fa fa-eye"></i> Опубликовать</button>   
+                {% else%} 
+                <button type="button" class="btn-sm btn-default btn-hover-primary" onclick="public_comment({{ comment.id }}, 0);"><i class="fa fa-eye-slash"></i> Скрыть</button> 
+                {% endif%}             
+                {% if not comment.answer_date %} 
+                <button type="button" class="btn-sm btn-default btn-hover-primary" onclick="answer_comment({{ comment.id }}, '{% if current_user.is_admin %}{{ comment.user_email }}{% endif%}');"><i class="fa fa-plus"></i> Ответить</button>
+                {% endif%}
+                <button type="button" class="btn-sm btn-default btn-hover-primary" onclick="edit_comment({{ comment.id }});"><i class="fas fa-pencil-alt"></i> Изменить</button> 
+                <button type="button" class="btn-sm btn-default btn-hover-primary" onclick="del_comment({{ comment.id }});"><i class="fa fa-times"></i> Удалить</button>
+                {% endif%}
+            <hr>
+            {% if comment.answer_date%}
+            <div class="row">
+                <div class="col-1">
+                    <img class="me-3 img-sm" alt="Профиль пользователя" src="{{ url_for('main.static', filename='/img/admin.png') }}">
+                </div>
+                <div class="col">
+                    <div class="mar-btm">
+                        <p class="text-semibold box-inline" style="margin-bottom: 0px;"><b>Администратор</b></p>
+                        <p class="text-muted text-sm"><i class="far fa-clock"></i> {{ comment.answer_date }}</p>
+                    </div>
+                    <p id='comment_text_{{ comment.answer_id}}'>{{ comment.answer_text }}</p>
+                
+                    {% if current_user.is_admin and not comment.public_view %}
+                    <button type="button" class="btn-sm btn-default btn-hover-primary" onclick="edit_comment({{ comment.answer_id }});"><i class="fas fa-pencil-alt"></i> Изменить</button>
+                    <button type="button" class="btn-sm btn-default btn-hover-primary" onclick="del_comment({{ comment.answer_id}}, 1);"><i class="fa fa-times"></i> Удалить</button>                    
+                    {% endif%}                   
+                    <hr>
+                </div>    
+            </div>
+            {% endif%}
+           
+        </div>
+

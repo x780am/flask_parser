@@ -1,5 +1,5 @@
 from flask_login import login_user, logout_user, current_user
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, g
 from urllib.parse import urlsplit
 
 from app.auth import bp
@@ -19,7 +19,7 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Неправильный логин или пароль')
             return redirect(url_for('auth.login'))
-        user.update_when_login_user(ip=request.environ['REMOTE_ADDR'])
+        user.update_when_login_user(ip=g.ip_address)
         # login_user(user, remember=form.remember_me.data)
         login_user(user, remember=True)
         next_page = request.args.get('next')
@@ -39,7 +39,7 @@ def register():
         return redirect(url_for('main.index'))
     form = RegistrationForm()
     if form.validate_on_submit():        
-        if User().add(login=form.email.data, password=form.password.data, ip=request.environ['REMOTE_ADDR']):
+        if User().add(login=form.email.data, password=form.password.data, ip=g.ip_address):
             flash('Поздравляем, регистрация прошла успешно!!')
             return redirect(url_for('main.login'))
     return render_template('auth/register.html', title='Регистрация', form=form)

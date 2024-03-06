@@ -25,14 +25,18 @@ body {
       word-break: break-word;
   }
   
-  .modal .btn{
-      /*margin-left: 10px;
-      margin-bottom: 10px;*/
+ #EditCommentModal .btn{
       margin:10px 10px;
       margin-top: 5px;
       font-size: 15px;
-      width: 250px;
+      width: 200px;
+      height: 35px;
+      padding: 0px 0px;
   }
+  #EditCommentModalLabel {
+    text-align: center;
+  }
+
   #block_about .section-btn  .btn-secondary{
       margin-left: 0px;
       margin-top:10px;

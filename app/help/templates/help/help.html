@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block_help">
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav flex-column nav-pills" id="helpTab" role="tablist" aria-orientation="vertical">
+                {% if blocks %}
+                {% for block_data in blocks%}
+                {% include 'help/_help_menu.html' %}
+                {% endfor %}    
+                {% endif %}              
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="tab-content" id="helpTabContent">
+                {% if blocks %}
+                {% for block_data in blocks%}
+                {% include 'help/_help_data.html' %}
+                {% endfor %} 
+                {% endif %} 
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

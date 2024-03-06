@@ -1,0 +1,11 @@
+{% extends "email/base_email.html" %}
+
+{% block content_email %}
+
+<p>Пришел комментарий от клиента:</p>
+<p>Имя: {{ name }}</p>
+<p>Email: {{ email }}</p>
+<p>Сообщение: {{ message }}</p>
+<p>Ответить <a href='https://parser24.online/comments'>https://parser24.online/comments</a></p>
+
+{% endblock %}

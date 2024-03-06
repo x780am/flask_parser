@@ -1,0 +1,4 @@
+<div class="tab-pane fade {% if block_data.show%}active show{%endif %}"
+    id="{{ block_data.id }}" role="tabpanel" aria-labelledby="{{ block_data.id }}-tab">
+    {% include block_data.html %}
+</div>

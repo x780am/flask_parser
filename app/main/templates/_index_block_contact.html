@@ -1,0 +1,53 @@
+<section id = "block_contact">
+    <div class="container">
+        <div class="row work-head text-center">
+            <div class="col">
+                <h2>Хотите задать вопрос?</h2>
+                <p>Если Вам что-то не нравится, или хотите добавить что-то, то напишите нам. Вместе мы сделаем сервис лучше.<br>Не забудьте указать номер заказа, по которому возник вопрос.</p>
+            </div>
+        </div>
+
+        <div class="row block_contact">
+            <div class="col">
+                <form id="contact_form" method="POST">                    
+                    {{ contact_form.csrf_token }}
+                    <div class="text-danger my-2" id="csrf_token-error">
+                    </div>
+                    <div class="form-group row">                      
+                        {{ contact_form.name.label(class='col-md-2 col-form-label') }}
+                        <div class="col-md-10">
+                            {{ contact_form.name(class='form-control') }}
+                            <div id="name-error" class="invalid-feedback"></div>
+                        </div>
+                    </div> 
+                    <div class="form-group row">                      
+                        {{ contact_form.email.label(class='col-md-2 col-form-label') }}
+                        <div class="col-md-10">
+                            {{ contact_form.email(class='form-control') }}
+                            <div id="email-error" class="invalid-feedback"></div>
+                        </div>
+                    </div>   
+                    <div class="form-group row">                      
+                        {{ contact_form.message.label(class='col-md-2 col-form-label') }}
+                        <div class="col-md-10">
+                            {{ contact_form.message(class='form-control') }}
+                            <div id="message-error" class="invalid-feedback"></div>
+                        </div>
+                    </div>        
+                    <div class="form-group row">   
+                        <div class="col text-center">          
+                            {{ contact_form.submit(class='btn btn-primary')|safe }}
+                        </div> 
+                    </div>
+                    <div class="form-group row">
+                        <small class="form-text text-muted " style="text-align: center; margin: 0 auto;" >
+                           Нажимая на кнопку, вы даете согласие на <a class="underline" style="color:black;" href="{{ url_for('main.politics')}}" target="_blank" rel="nofollow">обработку персональных данных</a> и
+                           принимаете условия <a class="underline" style="color:black;" href="{{ url_for('main.static', filename='/files/oferta.pdf') }}" rel="nofollow" target="_blank">пользовательского соглашения.</a>
+                        </small>
+                    </div>                    
+                </form>
+                <div class="alert alert-success" style="display: none;" id="contact_form_successmessage" role="alert"></div>                    
+            </div>
+        </div>
+    </div>
+</section>

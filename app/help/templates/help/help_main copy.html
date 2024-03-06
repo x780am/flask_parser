@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block_help">
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav flex-column nav-pills" id="helpTab" role="tablist" aria-orientation="vertical">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint in ('help.how_use','help.index') %}active{%endif %}"
+                        id="help-how-use-tab" data-toggle="pill" href="{{ url_for('help.how_use') }}" role="tab" aria-controls="help-how-use" aria-selected="false">Как пользоваться парсером объявлений</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint=='help.faq' %}active{%endif %}"
+                        id="help-faq-tab" data-toggle="pill" href="{{ url_for('help.faq') }}" role="tab" aria-controls="help-faq" aria-selected="false">FAQ. Вопросы и ответы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint =='help.reg'%}active{%endif %}"
+                        id="help-reg-tab" data-toggle="pill" href="{{ url_for('help.reg') }}" role="tab" aria-selected="true">Как зарегистрироваться</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-rezume') echo 'active show'; ?>"
+                        id="help-rezume-tab" data-toggle="pill" href="#help-rezume" role="tab" aria-selected="false">Парсинг резюме</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-anonym') echo 'active show'; ?>"
+                        id="help-anonym-tab" data-toggle="pill" href="#help-anonym" role="tab"aria-selected="false">Парсинг не защищенных номеров</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-dubli_phone') echo 'active show'; ?>"
+                        id="help-dubli_phone-tab" data-toggle="pill" href="#help-dubli_phone" role="tab" aria-selected="true">Парсинг только уникальных телефонов</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-only-new') echo 'active show'; ?>"
+                        id="help-only-new-tab" data-toggle="pill" href="#help-only-new" role="tab" aria-selected="true">Парсинг новых объявлений</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-dubli_ads') echo 'active show'; ?>"
+                        id="help-dubli_ads-tab" data-toggle="pill" href="#help-dubli_ads" role="tab" aria-selected="true">Парсинг только уникальных объявлений</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-param-in-col') echo 'active show'; ?>"
+                        id="help-param-in-col-tab" data-toggle="pill" href="#help-param-in-col" role="tab" aria-selected="true">Параметры объявления по столбцам</a>
+                </li>
+                <!--li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-stat-view') echo 'active show'; ?>"
+                        id="help-stat-view-tab" data-toggle="pill" href="#help-stat-view" role="tab" aria-selected="true">Статистика просмотров</a>
+                </li-->
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($action=='help-mob') echo 'active show'; ?>"
+                        id="help-mob-tab" data-toggle="pill" href="#help-mob" role="tab" aria-selected="true">Мобильная/полная версия</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="tab-content" id="helpTabContent">
+                <div class="tab-pane fade {% if request.endpoint in ('help.how_use','help.index') %}active show{%endif %}"
+                        id="help-how-use" role="tabpanel" aria-labelledby="help-how-use-tab">
+                    {% include 'help/help-how-use.html' %}
+                </div>
+                <div class="tab-pane fade {% if request.endpoint=='help.faq' %}active show{%endif %}"
+                        id="help-faq" role="tabpanel" aria-labelledby="help-faq-tab">
+                    {% include 'help/help-faq.html' %}
+                </div>
+                <div class="tab-pane fade {% if request.endpoint =='help.reg'%}active show{%endif %}""
+                        id="help-reg" role="tabpanel" aria-labelledby="help-reg-tab">
+                    {% include 'help/help-reg.html' %}
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-rezume') echo 'active show'; ?>"
+                        id="help-rezume" role="tabpanel" aria-labelledby="help-rezume-tab">
+                    {% include 'help/help-rezume.html' %}
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-anonym') echo 'active show'; ?>"
+                        id="help-anonym" role="tabpanel" aria-labelledby="help-anonym-tab">
+                    <?php require("help-anonym.php"); ?>
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-dubli_phone') echo 'active show'; ?>"
+                        id="help-dubli_phone" role="tabpanel" aria-labelledby="help-dubli_phone-tab">
+                    <?php require("help-dubli_phone.php"); ?>
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-only-new') echo 'active show'; ?>"
+                        id="help-only-new" role="tabpanel" aria-labelledby="help-only-new-tab">
+                    <?php require("help-only-new.php"); ?>
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-dubli_ads') echo 'active show'; ?>"
+                        id="help-dubli_ads" role="tabpanel" aria-labelledby="help-dubli_ads-tab">
+                    <?php require("help-dubli_ads.php"); ?>
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-param-in-col') echo 'active show'; ?>"
+                        id="help-param-in-col" role="tabpanel" aria-labelledby="help-param-in-col-tab">
+                    <?php require("help-param-in-col.php"); ?>
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-stat-view') echo 'active show'; ?>"
+                        id="help-stat-view" role="tabpanel" aria-labelledby="help-stat-view-tab">
+                    <?php require("help-stat-view.php"); ?>
+                </div>
+                <div class="tab-pane fade <?php if ($action=='help-mob') echo 'active show'; ?>"
+                        id="help-mob" role="tabpanel" aria-labelledby="help-mob-tab">
+                    <?php require("help-mob.php"); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

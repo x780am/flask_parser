@@ -11,7 +11,9 @@
     width:100%;
 }
 #header .section-table{
-    display:table;
+    position: relative;
+    padding: 0 0;
+    display: table;
     height:100%;
     width:100%;
 }
@@ -28,7 +30,6 @@
     padding-top: 5%; /*отступ от текста*/
     max-width: 550px;
     display:inline-block;
-
 }
 
 #header h1{
@@ -61,6 +62,28 @@
     margin: 10px;
     text-decoration: underline;
 }
+#header .meny a:hover {
+    color: #ffc107;
+}
+#header .btn{
+    font-family: Montserrat, sans-serif;
+    font-size: 18px;
+    text-transform:uppercase;
+    padding: 10px 20px; 
+    margin: 5px 20px ;
+    transition:background .5s;
+    width: 350px;
+}
+.primary_blue{   
+    background: #59a9ff;
+    border-color: #59a9ff;
+}
+.primary_blue:hover{   
+    background: #4e94df;
+    border-color: #4e94df;
+}
+
+
 /*===================== block_about ===================*/
 #block_about{
 	background: #ededed;
@@ -127,14 +150,30 @@
 /*================= block_free ==============================*/
 #block_free{
 	border-bottom: 2px solid #ededed;
+}
+#block_free .form-group{
+    margin-bottom: 16px;
+}
+#block_free small{
+    color:  rgb(134, 142, 150);
+    font-size: 85%;
+    font-weight: 400;
+}
+#block_free .small_a{
+    color:  rgb(134, 142, 150);
+}
+#block_free .small_a:hover{
+    color:  black;
+}
 
+#block_free .form-check-input:checked {
+  background-color: #0a7ffb;
+  color: rgba(0, 0, 0, 0.275);
 }
 
 /*================= block_polya ==============================*/
 #block_polya{
 	border-bottom: 2px solid #ededed;
-
-
 }
 #block_polya ul li i{
     font-size: 17px;
@@ -148,24 +187,25 @@
 }
 /*================= block_faq ==============================*/
 #block_faq{
-	background: #ededed;
+	background: rgb(246, 247, 249);
 	border-bottom: 2px solid #ededed;
-
-
+}
+#block_faq .accordion{
+    margin: 15px 0px;
+    --bs-accordion-bg : rgb(246, 247, 249);
 }
 /*================= block_contact ==============================*/
 #block_contact{
-	background: #ededed;
-	border-bottom: 2px solid #ededed;
+	background: rgb(246, 247, 249);
+	border-bottom: 2px solid rgb(246, 247, 249);
 
 }
 #block_contact .form-group{
     margin-bottom: 10px;
-
 }
 /*===================== block_work ===================*/
 #block_work{
-	background: #ededed;
+	background: rgb(246, 247, 249);
 
 
 }
@@ -205,10 +245,6 @@ margin:0 auto;
     margin-bottom: 10px;
 }
 /*===================== block_comments_main ===================*/
-#block_comments_main{
-    	/*background: #ededed;*/
-
-}
 #block_comments_main p{
     word-break: break-word;
 }

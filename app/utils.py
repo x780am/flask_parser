@@ -12,5 +12,11 @@ def admin_required(func):
 
     return decorated_function
 
-def get_ip():
-    return request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+
+import calendar
+import datetime
+def get_now_unix():
+    return str(calendar.timegm(datetime.datetime.utcnow().utctimetuple()))
+
+if __name__ == "__main__":
+    print(get_now_unix())

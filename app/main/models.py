@@ -424,9 +424,9 @@ class Order():
             self.id = id
     
     def id(self):
-        return self.id
+        return self.id        
         
-        
+    # данные по заказу из БД
     def _get_data_in_db(self):
         with mysql() as db:
             sql = 'SELECT l.hash, l.get_ads, l.del_ads, l.all_ads, l.rezume, l.pay_ads, l.pars_ads, l.old_ads, l.old_phone as cnt_old_phone,'\
@@ -452,6 +452,23 @@ class Order():
                 current_app.logger.critical(f"[Order._get_data_in_db] Ошибка при запросе: {db.error}")
                 return None
             return select_order
+        
+    # сообщение по заказу из БД
+    def _get_order_message_in_db(self):
+        with mysql() as db:
+            sql = 'select comment, l.hash '\
+                  'from order_comment t '\
+                  f'inner join log l on l.order_id=t.order_id and l.status_id=4 and l.order_id=%(id)s '
+                
+            select_order_message = db.select_one(sql, {'id': self.id})
+            if db.error:
+                current_app.logger.critical(f"[Order._get_order_message_in_db] Ошибка при запросе: {db.error}")
+                return None
+            select_order_message_text = select_order_message["comment"]
+            select_order_message_text += f'<br>Для повтора заказа нажмите <button type="button" id="repeat" '\
+                f'onclick="order_repeat(\'{select_order_message["hash"]}\')">Повторить заказ</button>'
+            
+            return select_order_message_text
     
     def get_data(self):
         """
@@ -465,10 +482,7 @@ class Order():
             return None
         
         #********** получаем данные из БД **********
-        select_order = self._get_data_in_db()
-        if not select_order:
-            current_app.logger.critical(f"[Order.get_data] пустой ответ из БД")
-            return None
+        select_order = self._get_data_in_db()      
         
         print(f'select_order={select_order}')
         return_data = dict()
@@ -496,7 +510,7 @@ class Order():
                         dopfields_name = dopfields_name_set[key]
         return_data["dopfields_name"] = dopfields_name        
         
-        #********** поля **********
+        #********** поля из БД**********
         return_data["url"] = select_order["url"]
         return_data["status_id"] = select_order["status_id"]
         return_data["limit_count"] = select_order["limit_count"]
@@ -505,91 +519,111 @@ class Order():
         return_data["status"] = select_order["status"]
         return_data["export_csv"] = select_order["export_csv"]
         return_data["parse_by_date"] = select_order["parse_by_date"]
-        
-        # пока не применила
-        return_data["count_all_bez_limit"] = select_order["count_all_bez_limit"]
-        return_data["seller_dubli_count"] = select_order["seller_dubli_count"]
-        return_data["cnt_old_phone"] = select_order["cnt_old_phone"]
-        return_data["old_ads"] = select_order["old_ads"]
         return_data["free"] = select_order["free"]
-        return_data["old_ads"] = select_order["old_ads"]
-        return_data["get_ads"] = select_order["all_ads_pars"] # всего = сумма скачено + без номеров и т.д.
-        return_data["all_ads"] = select_order["pay_ads"] # всего оплачено
-        return_data["load_ads"] = select_order["load_ads"] # выгружено в файл Подходят для выгрузки                
-        
-        return_data["url_short"] = return_data["url"][0:80]
-        return_data["fields_name_short"] = return_data["fields_name"][0:80]
+        return_data["url_short"] = return_data["url"][0:80] if len(return_data["url"]) > 80 else ""
+        return_data["fields_name_short"] = return_data["fields_name"][0:80] if len(return_data["fields_name"]) > 80 else ""
             
         
         #********** добавим .'?1709718949 чтоб не кешировался файл ********** 
         for key, value in select_order.items():     
             if key in ["xls_file", "csv_file", "csv_zip_file"] and value:
                 return_data[key] = f"{value}?{get_now_unix()}"
-        """        
+               
         # если выбрано парсить и без телефона, то не будем показывать что есть ошибки
         if select_order["only_with_phone"] == 0 and select_order["no_phone_ads"] > 0:
             return_data["no_phone_ads"] = 0
         else:
             return_data["no_phone_ads"] = select_order["no_phone_ads"]
-          
+        
+        load_ads = 0  
+        all_ads_pars = 0
+        seller_dubli_count = 0 
+           
         # если нужно парсить продавцов, то из общего числа спаршенный объявлений вычтем те что без продавцов
-        if select_order["get_seller_data"] == 1:
-            return_data["get_ads"] = select_order["get_ads"] - select_order["need_pars_seller"]
+        # if select_order["get_seller_data"] == 1:
+        #     return_data["get_ads"] = select_order["get_ads"] - select_order["need_pars_seller"]
         
         # если заказ завершен, то построим все от количества выгруженных
         if select_order["order_work"] == 3:
             # сколько выгружено - это известно точно
-            return_data["load_ads"] = select_order["count_real"]
+            load_ads = select_order["count_real"]
             if select_order["seller_dubli"] == 1:
                 if select_order["limit_count"] > 0:
-                    seller_dubli_count = select_order["pay_ads"] - (select_order["load_ads"] + select_order["old_ads"] 
-                                                                    + select_order["anonym_ads"] + select_order["dubl_phone"] 
-                                                                    + select_order["cnt_old_phone"] + select_order["no_phone_ads"])
+                    seller_dubli_count = select_order["pay_ads"] - (load_ads + select_order["old_ads"])
                 else:
                     seller_dubli_count = select_order["get_ads"] - select_order["count_real"]  # 14 марта 2023 до этого было $seller_dubli_count=0;
+            all_ads_pars = load_ads + select_order["old_ads"] + seller_dubli_count
         else:
             # а может $all_ads_pars = $all_ads_pars - но не всегда работает, особо плохо при резюме
             all_ads_pars = select_order["get_ads"] + select_order["no_phone_ads"] + select_order["old_ads"]
-            select_order["load_ads"]  = select_order["get_ads"] - select_order["anonym_ads"]- select_order["dubl_phone"] - select_order["cnt_old_phone"]
-            if select_order["load_ads"] < 0:
-                select_order["load_ads"]  = 0
-
-            if select_order["seller_dubli"] and select_order["xls_file"] != '':
-                new_0 = 0
-                # $auth_data = $db->select("SELECT count(id) as cnt from z_ads_$order_id where new=0 ", array());
-                # if (isset($auth_data[0]))
-                #     $new_0 = $auth_data[0]['cnt'];
-                # seller_dubli_count = $new_0 - $load_ads;
-                # $all_ads_pars = $all_ads_pars + seller_dubli_count;
+            load_ads  = select_order["get_ads"]
+            if load_ads < 0:
+                load_ads  = 0
             
-            else:
-                seller_dubli_count=0                    
-        """  
+            seller_dubli_count=0 
+
+            # if select_order["seller_dubli"] and select_order["xls_file"] != '':
+            #     new_0 = 0
+            #     # $auth_data = $db->select("SELECT count(id) as cnt from z_ads_$order_id where new=0 ", array());
+            #     # if (isset($auth_data[0]))
+            #     #     $new_0 = $auth_data[0]['cnt'];
+            #     # seller_dubli_count = $new_0 - load_ads;
+            #     # $all_ads_pars = $all_ads_pars + seller_dubli_count;
+            
+            # else:
+            #     seller_dubli_count=0                    
+         
+        # комментарий к заказу для пользователя
+        comment_for_order = ''
         if select_order["parse_by_date"] and select_order["count_all_bez_limit"] > 0 and select_order["order_work"] < 3:                
-            if mess_for_order !='':
-                mess_for_order = mess_for_order + '<br>'
-            mess_for_order = mess_for_order + f"По заказу будет обработано {select_order['count_all_bez_limit']}"\
+           comment_for_order = f"По заказу будет обработано {select_order['count_all_bez_limit']}"\
                     f" объявлений, чтобы спарсить только объявления по дату {select_order['parse_by_date']}. Это займет какое-то время."\
                     f" Ожидаемое кол-во объявлений {select_order['pay_ads']}, точное значение будет известно только после парсинга."
-            mess_show = 1
+            
 
         if select_order["stop_negative_balance"] == 1 and select_order["order_work"] < 3:
             queue_mess ='Заказ остановлен, так как на вашем балансе отрицательная сумма. '\
                     'Пополните баланс аккаунта и заказ запустится автоматически, в противном '\
                     f'случае заказ будет отменен {select_order["negative_hours_left"]}.'
         
-        seller_dubli_count = 0
-        return_data["seller_dubli_count"] = seller_dubli_count
+        #********** поля для alert **********
         queue_mess = ""
         return_data["queue_mess"] = queue_mess
         admin_panel = ''
         return_data["admin_panel"] = admin_panel
-        mess_show = ''
-        return_data["mess_show"] = mess_show
-        mess_for_order = ''
-        return_data["mess_for_order"] = mess_for_order
-        return return_data
+        return_data["comment_for_order"] = comment_for_order
+        return_data["message_for_order"] = self._get_order_message_in_db()
         
+        # формируем строку 'Скачано объявлений:'        
+        div_get_ads_dop = f"({select_order['count_all_bez_limit']}) " if select_order["count_all_bez_limit"] > 0 else ""
+        div_get_ads = f"{all_ads_pars} из {select_order['pay_ads']} {div_get_ads_dop}объявлений(-я)"        
+        
+        # координаты для progressbar
+        progressbar_ads_text = f"{all_ads_pars} из {select_order['pay_ads']}"
+        progressbar_ads_coord = round(100 * all_ads_pars / select_order['pay_ads'])
+        progressbar_ads_coord = 100 if progressbar_ads_coord > 100 else progressbar_ads_coord
+        
+        # формируем строку 'Подходят для выгрузки:'
+        div_good_ads_dop = 'уникальных ' if select_order["ads_dubli"] == 1 else ""
+        div_good_ads = f"{load_ads} {div_good_ads_dop}объявлений(-я)"
+          
+        # формируем строку 'Исключены из выгрузки:'
+        div_no_ads = ''
+        if select_order["only_new"] == 1:            
+            div_no_ads += f'Объявления, скачанные ранее: {select_order["old_ads"]}'
+        if select_order["seller_dubli"] == 1:
+            div_no_ads += f'<br>' if div_no_ads else div_no_ads
+            div_no_ads += f'Повторы продавцов: {seller_dubli_count}'
+        
+        #********** поля для div и progressbar **********
+        return_data["div_get_ads"] = div_get_ads
+        return_data["div_good_ads"] = div_good_ads
+        return_data["div_no_ads"] = div_no_ads  
+        return_data["progressbar_ads_text"] = progressbar_ads_text  
+        return_data["progressbar_ads_coord"] = progressbar_ads_coord  
+              
+        
+        return return_data        
    
     # сгенерировать токен jwt 
     def get_order_token(self):

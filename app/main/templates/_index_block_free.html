@@ -16,7 +16,15 @@
             {{ status_work.status_text|safe }}
         </div>
         {% endif %}
+        {% if current_user.is_anonymous %}
+        <div class="alert alert-info" role="alert">
+            Зарегистрируйтесь, чтобы получить больше объявлений
+             <a href='{{ url_for("auth.login") }}'>Вход</a> / <a href='{{ url_for("auth.register") }}'>Регистрация</a>
+        </div>
+        {% endif %}
+
         {#}
+        {% if %}
         <?php //30 руб. на счет и скачать еще 1000 объявлений бесплатно.
             if ($session_login_id=='')
             echo '<div class="alert alert-info" role="alert">

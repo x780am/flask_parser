@@ -142,10 +142,17 @@ def order(token):
     # order = Order(token=token).id
     # return str(order)
     # order = Order(token=token).get_data()
-    # order = Order(id=338130).get_data() # free
-    order = Order(id=338142).get_data() 
+    # order = Order(id=338130).get_data() # free=1
+    # order = Order(id=338146).get_data() # с лимитом
+    # order = Order(id=53821).get_data() # парсить по дату
+    order = Order(id=338139).get_data() # удалять дубли 
     print(order)
-    return render_template("order.html", order=order)
+    # order['status_id'] = 3
+    status_work = Parser_data().get_status_work()
+    return render_template("order.html", 
+                           order=order,
+                           status_work=status_work,
+                           HOW_MANY_DAYS_STORE_FILE=current_app.config["HOW_MANY_DAYS_STORE_FILE"])
     # token = Order(id=338145).get_order_token()
     # return token
     # order_data = Order(id=338145).get_data()

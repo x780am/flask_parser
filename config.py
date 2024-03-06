@@ -28,8 +28,10 @@ class Config:
     ADMINS = [os.environ.get('ADMIN_EMAIL')]
     
     SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL')
-    
+    # цена в рублях за объявление
     PRICE = os.environ.get('PRICE')
+    # сколько дней хранить файлы
+    HOW_MANY_DAYS_STORE_FILE = os.environ.get('HOW_MANY_DAYS_STORE_FILE')
        
     # количество элементов на странице
     USERS_PER_PAGE = 10

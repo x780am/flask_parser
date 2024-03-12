@@ -4,7 +4,16 @@
             <div class="col-md-4">
                 <h2 class="title">Контакты</h2>
                 <div class="logo">
-                    <img src="{{ url_for('main.static', filename='img/favicon.ico') }}" width="30" height="30" class="d-inline-block align-top" alt="parser24"> parser24
+                    <a class="navbar-brand" style="display:inline-block; padding: 0 0;" href="{{ url_for('main.index') }}">
+                        <div style="display:inline-block; vertical-align: top; margin: 0 0; margin-top: 7px;">
+                          <img src="{{ url_for('main.static', filename='img/favicon.ico') }}" alt="parser24" width="40" height="40" {#}class="d-inline-block align-text-top"{#}>
+                        </div>
+                        <div class="col"  style="display:inline-block; margin: 0 0; text-align: center;">
+                          <p style="display:inline-block; font-size: 1em; margin: 0 0; text-align: center;">PARSER24 </p>
+                          <p style="font-size: 0.6em; margin: 0 0; text-align: center;">ex avi2-parser</p>
+                        </div>
+                    </a>
+                    {#}<img src="{{ url_for('main.static', filename='img/favicon.ico') }}" width="30" height="30" class="d-inline-block align-top" alt="parser24"> parser24{#}
                 </div>
                 <div class="body">
                     <ul class="list-unstyled">
@@ -30,7 +39,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <h2 class="title">Новости</h2>
+                <h2 class="title">Важное</h2>
                 <ul class="news list-unstyled">
                   	<li>
                         <small>9 января 2024</small>
@@ -61,7 +70,7 @@
                             <div id="email-error" class="invalid-feedback"></div>
                         </div>                        
                         {{ subscribe_form.submit(class='btn btn-primary') }}
-                        <small>Нажимая на кнопку, вы даете согласие на обработку своих персональных данных</small>
+                        <!--<small>Нажимая на кнопку, вы даете согласие на обработку своих персональных данных</small>-->
                     </form>                    
                     <div class="alert alert-success" style="display: none;" id="subscribe_form_successmessage" role="alert"></div>                                            
                 </div>

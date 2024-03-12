@@ -1,0 +1,47 @@
+/*#tab-order .nav-tabs {
+    border-bottom: none;
+}
+  
+#tab-order .nav-tabs .nav-link {
+    border: none;
+    color: #666;
+}
+
+#tab-order .nav-tabs .nav-link.active {
+    border: none;
+    color: #333;
+    background-color: #fff;
+    border-bottom: 2px solid #007bff;
+}
+
+#tab-order .tab-content {
+    border: 1px solid #ddd;
+    padding: 20px;
+}
+
+#tab-order .tab-pane.fade:not(.show) {
+    display: none;
+}*/
+
+#calcform .form-group{
+    margin-bottom: 16px;
+}
+#calcform small{
+    color:  rgb(134, 142, 150);
+    font-size: 85%;
+    font-weight: 400;
+}
+#calcform .small_a{
+    color:  rgb(134, 142, 150);
+}
+#calcform .small_a:hover{
+    color:  black;
+}
+
+
+#payform small{
+    color:  rgb(134, 142, 150);
+    font-size: 85%;
+    font-weight: 400;
+}
+

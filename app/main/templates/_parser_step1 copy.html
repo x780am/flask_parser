@@ -1,0 +1,164 @@
+<form id="calcform" method="POST">
+    <div class="">
+        <label class="form-label">Ссылки с доски объявлений (одна или несколько)</label>
+        <textarea id="url_avito" class="form-control" placeholder="" rows="2"></textarea>
+        <small class="form-text text-muted">
+            Скопируйте ссылки из адресной строки браузера после применения нужных фильтров на <a class="underline" href="https://avito.ru" target="_blank">avito.ru</a>
+            Пример: https://www.avito.ru/all/predlozheniya_uslug                                
+        </small>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" checked value="" id="local_priority">
+        <label class="form-check-label" for="local_priority">
+            Сначала в выбранном городе/радиусе
+        </label>
+        <div>
+            <small class="form-text text-muted">Соответствует параметру "Сначала из ...", который не передается в ссылке </small>
+        </div>
+    </div> 
+    
+    {#}<div class="form-group row">
+        <label class="col-md-2">Ссылки с доски объявлений (одна или несколько)</label>
+        <div class="col-md-10">
+            <textarea id="url_avito" class="form-control" placeholder="" rows="3"></textarea>
+            <small class="form-text text-muted">
+                Скопируйте ссылки из адресной строки браузера после применения нужных фильтров на <a class="underline" href="https://avito.ru" target="_blank">avito.ru</a>
+                <br>Пример: https://www.avito.ru/moskva/predlozheniya_uslug                                
+            </small>
+        </div>                    
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10 form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" name="local_priority" type="checkbox" id="local_priority" value="Сначала в выбранном городе/радиусе"> 
+                <small class="form-text text-muted">Соответствует параметру "Сначала из ..."/"Сначала в выбранном радиусе". </small>
+            </label>
+        </div>
+    </div>{#}
+
+    <div class="mb-3" style="border: 1px solid grey; padding: 10px 10px; border-radius: 0.375rem">
+        {#}<div class="mb-3">Фильтр объявлений:</div>{#}
+        <div class="form-check mb-3">
+            <input class="form-check-input" name="exampleRadios" type="radio" value="option0" checked  id="parse_all">
+            <label class="form-check-label" for="parse_all">
+                Парсить все объявления
+            </label>
+        </div>        
+  
+        <div class="form-check mb-3">
+            <div class="row">
+                <div class="col-sm-3">
+                    <input class="form-check-input" name="exampleRadios" type="radio" value="option1"  id="parse_by_date">
+                    <label class="form-check-label" for="parse_by_date">
+                        Парсить по дату
+                    </label>
+                </div>                
+                <div class="col-sm-9">
+                    <input id="parse_by_date" type="date" class="form-control" placeholder="" value="Без ограничений">
+                </div>
+            </div>
+            <div class="row">
+                <small class="form-text text-muted">
+                    Выберите дату, по которую парсить объявления. Пример: за сегодня и вчера, укажите вчерашнюю дату.
+                </small>
+            </div>
+        </div>
+        <div class="form-check mb-3">
+            <div class="row">
+                <div class="col-sm-3">
+                    <input class="form-check-input" name="exampleRadios" type="radio" value="option2" id="limit">
+                    <label class="form-check-label " for="limit">
+                        Лимит объявлений
+                    </label>                    
+                </div>                
+                <div class="col-sm-9">
+                    <input id="limit"  type="text" class="form-control" placeholder="Лимит может быть от 1 до 4900 (ограничение Авито)" value="">
+                </div>
+            </div>                
+            <div class="row"> 
+                <small class="form-text text-muted">
+                    Укажите сколько объявлений нужно скачать по каждой ссылке
+                </small>
+            </div>
+        </div> 
+    </div> 
+    {#}
+<div style="border: 1px solid grey; padding: 10px 10px; border-radius: 0.375rem">
+    <div class="mb-3">Фильтр объявлений:</div>
+    <div class="input-group">
+        <div class="input-group-text">
+            <input class="form-check-input" type="radio" name="exampleRadios"  checked value="" id="parse_all1">
+            <label class="form-check-label" for="parse_all1">
+                &nbsp;&nbsp;Парсить все объявления
+            </label>
+        </div>        
+    </div>
+    <div class="input-group">
+        <div class="input-group-text">
+            <input class="form-check-input" type="radio" name="exampleRadios"  value="" id="parse_by_date">
+            <label class="form-check-label" for="parse_by_date">
+                &nbsp;&nbsp;Парсить по дату&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </label>
+        </div>        
+        <input id="parse_by_date" type="date" class="form-control" placeholder="" value="Без ограничений">
+        <div> 
+            <small class="form-text text-muted">
+                Если хотите спарсить объявление по определенную дату, то укажите ее. Пример: за сегодня и вчера, укажите вчерашнюю дату.
+            </small>
+        </div>
+    </div>
+    <div class="input-group">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="input-group-text">                
+                    <input class="form-check-input" name="exampleRadios" type="radio" value="option2" id="limit">
+                    <label class="form-check-label " for="limit">
+                        &nbsp;&nbsp;Лимит объявлений
+                    </label>                    
+                </div>          
+            </div>      
+            <div class="col-sm-5">
+                <input id="limit"  type="text" class="form-control" placeholder="0 - все объявления" value="">
+            </div>
+        </div> 
+        <div> 
+            <small class="form-text text-muted">
+                Укажите сколько объявлений нужно скачать по каждой ссылке. Лимит может быть от 1 до 4900 (ограничение Авито)
+            </small>
+        </div>
+    </div>
+</div>  {#}
+    {#}
+    <div class="form-group row">
+        <label class="col-md-2">Парсить по дату</label>
+        <div class="col-md-10">
+            <input id="parse_by_date" type="date" min="" max="" class="form-control" placeholder="" value="Без ограничений">
+            
+            <small class="form-text text-muted">
+                Если хотите спарсить объявление по определенную дату, то укажите ее. Пример: за сегодня и вчера, укажите вчерашнюю дату.
+                Не заполняйте поле, если хотите скачать все объявления по ссылкам.
+            </small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2">Лимит объявлений</label>
+        <div class="col-sm-10">
+            <input id="limit"  type="text" class="form-control" placeholder="0 - все объявления" value="">
+            <small class="form-text text-muted">
+                Укажите сколько объявлений нужно скачать по каждой ссылке.  Лимит не может быть более 4900 объявлений (ограничение доски объявлений)
+                Не заполняйте поле, если хотите скачать все объявления по ссылкам
+            </small>
+        </div>
+    </div>
+    {#}
+    
+    {#}
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="check_vip">
+        <label class="form-check-label" for="check_vip">
+            Парсить вне очереди по цене 0,14 руб. за объявление
+        </label>        
+    </div> 
+    {#}
+</form>

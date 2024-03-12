@@ -5,6 +5,7 @@
 
 {% block content %}
 
+
 <section id = "header" class="vh-100">
     <div class="section-table">
         <div class="section-row">
@@ -51,6 +52,8 @@
 {% include '_index_block_comments.html' %}
 
 {% include '_index_block_contact.html' %}
+l
+
 
 {% endblock %}
 
@@ -60,6 +63,8 @@
 <script>{# задаем переменные, которые нужны в js файлах #}    
     const fetch_block_free_url = "{{ url_for('main.free_order') }}";
     const fetch_block_contact_url = "{{ url_for('main.contact') }}";
+
+    
 </script>
 
 <script src="{{ url_for('main.static', filename='js/index_block_free.js') }}"></script>

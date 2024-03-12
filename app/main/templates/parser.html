@@ -1,8 +1,277 @@
 {% extends "base.html" %}
 
 {% block content_head %}
+
+<link rel="stylesheet" href="{{ url_for('main.static', filename='css/parser.css') }}">
 {% endblock %}
 
 {% block content %}
-    <h1>Парсер</h1>
+
+<div class="container" id="tab-order">
+    <div class='row text-center'>
+        <h1>Онлайн парсер Авито</h1>
+    </div>
+    <div class='row text-center' id ="tab_header" style="margin-top: 20px; margin-bottom: 20px;">
+        <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="ex2-tab-1" data-bs-toggle="tab" href="#ex2-tabs-1" role="tab" aria-controls="ex2-tabs-1" aria-selected="true">  
+                    Расчет стоимости
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ex2-tab-2" data-bs-toggle="tab" href="#ex2-tabs-2" role="tab" aria-controls="ex2-tabs-2" aria-selected="false">       
+                    Дополнительные параметры
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ex2-tab-3" data-bs-toggle="tab" href="#ex2-tabs-3" role="tab" aria-controls="ex2-tabs-3" aria-selected="false">
+                    Оплата заказа
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class='row' style="margin-top: 20px; margin-bottom: 20px;">
+        <div class="tab-content" id="ex2-content">
+            <div class="tab-pane fade show active" id="ex2-tabs-1" role="tabpanel">                
+                {% include '_parser_step1.html' %}
+            </div>
+            <div class="tab-pane fade" id="ex2-tabs-2" role="tabpanel">              
+                {% include '_parser_step2.html' %}
+            </div>
+            <div class="tab-pane fade" id="ex2-tabs-3" role="tabpanel">              
+                {% include '_parser_step3.html' %}
+            </div>
+        </div>
+    </div>
+    <div class='row text-center' style="margin-top: 20px; margin-bottom: 20px;">
+        <div id="q-box__buttons">
+            <button id="prev-btn" type="button" class="d-inline-block d-none"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Предыдущий</font></font></button> 
+            <button id="calc-btn" type="button" class="btn btn-primary" >Рассчитать стоимость</button> 
+            <button id="pay-btn" type="button" class="btn btn-primary d-none" >Оплатить заказ</button> 
+            <button id="next-btn" type="button" class="d-inline-block d-none"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Следующий</font></font></button> 
+        </div> 
+    </div>
+</div>
+{#}
+<div id="loading" style="
+    background: url('{{ url_for("main.static", filename="img/spinner.gif") }}') no-repeat center center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9999999;" class="d-none"></div>	
+{#}
+
+<!-- Modal -->
+<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="loader"></div>
+                <div clas="loader-txt">
+                    <p>Check out this slick bootstrap spinner modal. <br><br><small>We are addicted to Bootstrap... #love</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include '_modal_create_order.html' %}
+
+{% endblock %}
+{% block content_js %}
+
+{#}<script src="{{ url_for('main.static', filename='js/parser.js') }}"></script>{#}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+ 
+<script>{# задаем переменные, которые нужны в js файлах #}    
+    const fetch_block_calc = "{{ url_for('main.calc_order') }}";
+
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const calcBtn = document.getElementById('calc-btn');
+    const payBtn = document.getElementById('pay-btn');
+    const calc_form = document.getElementById('calcform');
+    let current_step = 1;
+    let stepCount = 3
+
+    calc_form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+    });
+    
+    /*function handler(event) {
+        console.log(event.type, event.target)
+    }
+       
+    calc_form.addEventListener('input', handler);
+    calc_form.addEventListener('change', handler);
+    */
+
+    function btn_show(step){
+        $('#tab_header li:nth-child('+step+') a').tab('show');
+            
+        if (step == 1){
+            prevBtn.classList.add('d-none');
+            prevBtn.classList.remove('d-inline-block');
+            nextBtn.classList.add('d-none');
+            nextBtn.classList.remove('d-inline-block');
+            calcBtn.classList.remove('d-none');
+            calcBtn.classList.add('d-inline-block');
+            payBtn.classList.add('d-none');
+            payBtn.classList.remove('d-inline-block');
+        }
+        else if (step == 2){            
+            calcBtn.classList.remove('d-inline-block');      
+            calcBtn.classList.add('d-none');      
+            prevBtn.classList.remove('d-none');
+            prevBtn.classList.add('d-inline-block');
+            nextBtn.classList.remove('d-none');
+            nextBtn.classList.add('d-inline-block');
+            payBtn.classList.add('d-none');
+            payBtn.classList.remove('d-inline-block');
+        }
+        else if (step == 3){            
+            calcBtn.classList.remove('d-inline-block');  
+            calcBtn.classList.add('d-none');            
+            prevBtn.classList.remove('d-none');
+            prevBtn.classList.add('d-inline-block');
+            nextBtn.classList.add('d-none');
+            nextBtn.classList.remove('d-inline-block');
+            payBtn.classList.remove('d-none');
+            payBtn.classList.add('d-inline-block');
+        }
+
+    }
+
+    nextBtn.addEventListener('click', () => {
+        current_step++;
+        let previous_step = current_step - 1;
+
+        btn_show(current_step);       
+    });
+
+    prevBtn.addEventListener('click', () => {
+        current_step--;
+        let previous_step = current_step + 1; 
+        btn_show(current_step);
+    });
+    
+
+    const calc_form_fields = {
+        csrf_token: {
+            input: calc_form.querySelector("[id='csrf_token']"),
+            error: calc_form.querySelector("[id='csrf_token-error']"),
+        },
+        url: {
+            input: calc_form.querySelector("[id='url']"),
+            error: calc_form.querySelector("[id='url-error']")
+        },        
+        local_priority: {
+            input: calc_form.querySelector("[id='local_priority']"),
+            error: calc_form.querySelector("[id='local_priority-error']")
+        }     
+    };
+   
+    
+    function hideFunc() {
+        const truck_modal = document.querySelector('#LoaderModal');
+        const modal = bootstrap.Modal.getInstance(truck_modal);    
+        modal.hide();
+    }
+          
+    function hideModal() {
+        const modal_el  = document.querySelector('#LoaderModal');
+        const modal_obj = bootstrap.Modal.getInstance(modal_el);
+    
+        if (modal_obj ==  null){
+           return;
+        }
+    
+       modal_obj.hide();
+    }
+    
+    function showModal() {
+        const modal_el  = document.querySelector('#LoaderModal');
+        let   modal_obj = bootstrap.Modal.getInstance(modal_el);
+    
+        if (modal_obj ==  null){
+           modal_obj = new bootstrap.Modal(modal_el, {
+            backdrop: 'static'
+           });
+       }
+    
+       modal_obj.show();
+    }
+    calcBtn.addEventListener('click', async (e)=> {
+        /*const LoaderModal = new bootstrap.Modal(document.getElementById('LoaderModal'), {            
+            keyboard: false
+        });
+        LoaderModal.show();*/
+        showModal();
+
+        for (var key of Object.keys(calc_form_fields)) {
+            calc_form_fields[key].input.classList.remove('is-invalid');
+            calc_form_fields[key].error.innerHTML = "";
+        }
+        const response = await fetch(fetch_block_calc, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf_token: calc_form_fields.csrf_token.input.value,
+                url: calc_form_fields.url.input.value,
+                local_priority: calc_form_fields.local_priority.input.value
+            })
+        });
+        if (response.ok) {    
+            hideFunc();
+            current_step++;
+            let previous_step = current_step - 1;
+            btn_show(current_step);        
+            
+        } 
+        if (response.status==400) {           
+            hideFunc();
+            const errors = await response.json();
+            console.log(response);
+            Object.keys(errors).forEach((key) => {
+                calc_form_fields[key].input.classList.add('is-invalid');
+                calc_form_fields[key].error.innerHTML = errors[key][0];
+                
+            });
+            
+            
+        }  
+        hideFunc();
+        /*     
+        fetch(fetch_block_calc, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf_token: calc_form_fields.csrf_token.input.value,
+                url: calc_form_fields.url.input.value,
+                local_priority: calc_form_fields.local_priority.input.value
+            })
+          })
+            .then((response) => {console.log(response.json());})
+            .then((data) => {
+                //LoaderModal.dispose();
+                console.log(data);
+            })
+        */ 
+        
+    });
+    payBtn.addEventListener('click', () => {
+        alert("Заказ оплачен");
+    });
+
+</script>
+<script src="{{ url_for('main.static', filename='js/parser.js') }}"></script>
+
+
 {% endblock %}

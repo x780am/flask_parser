@@ -2,10 +2,10 @@ import jwt
 import time 
 from flask_login import current_user
 from app.sql import MySql as mysql
-from app.utils import get_now_unix
+from app.defs import get_now_unix
 from flask import current_app, url_for
 from app.main import json_data 
-
+from hashlib import md5
 
 class Query_db():
     # получить значение по user_id или login
@@ -412,32 +412,61 @@ class Parser_data():
         price_kop = round(price*100)
         return dict(price_rub=price, price_kop=price_kop)
     
-
+class MD5:
+    """
+    хеш номера заказа с солью
+    MD5.get_hash(338139)
+    MD5.check_hash(9097a880458c4a41f69211af0512e9d4,338139)
+    """
+    def __init__(self):
+        self.salt = current_app.config["SALT"]
+    def get_hash(self, data):
+        data = self.salt + str(data)
+        encrypt_data = md5(data.encode()).hexdigest()
+        return encrypt_data
+    def check_hash(self, hash, data):
+        data = self.salt + str(data)
+        if md5(data.encode()).hexdigest() == hash:
+            return True
+        else:
+            return False
+        
 class Order():
     """
     Класс для работы с заказом
     """
-    def __init__(self, id=None, token=None):
-        if token:
-            self.id = self.get_id_by_token(token)
+    def __init__(self, id=None, hash=None):
+        if hash:
+            self.id = self.get_id_by_hash(hash)
+            self.hash = hash
         if id:
             self.id = id
+            self.hash = self.get_hash_by_id(id)
     
     def id(self):
-        return self.id        
+        return self.id    
+    
+    def hash(self):
+        return self.hash    
+    
+    @staticmethod
+    def get_hash_by_id(order_id):
+        salt = current_app.config["SALT"]
+        data = salt + str(order_id)
+        encrypt_data = md5(data.encode()).hexdigest()
+        return encrypt_data
         
     # данные по заказу из БД
     def _get_data_in_db(self):
         with mysql() as db:
-            sql = 'SELECT l.hash, l.get_ads, l.del_ads, l.all_ads, l.rezume, l.pay_ads, l.pars_ads, l.old_ads, l.old_phone as cnt_old_phone,'\
+            # 'o.email, o.get_statistic, o.url as user_url, '\
+            # 'l.run,  l.cancel_order,o.new2020,o.user_id, '\
+            # 'l.rezume,l.pars_ads, l.old_phone as cnt_old_phone, l.all_ads, l.del_ads, '\
+            sql = 'SELECT l.hash, l.get_ads, l.pay_ads, l.old_ads,'\
                         'l.no_phone_ads, l.anonym_ads, l.dubl_phone, l.error_ads, l.need_pars_seller, l.check_del,'\
-                        'l.run, l.stop_negative_balance, l.cancel_order,'\
-                        'o.email, o.get_statistic,'\
-                        'o.url as user_url, o.free,'\
-                        'o.user_id, ifnull(u.ban,0) as ban, o.new2020, o.count_real,'\
-                        'o.autoload_id, o.only_with_phone, o.date_pay, '\
+                        'o.autoload_id, o.only_with_phone, o.date_pay, l.stop_negative_balance, o.count_real,'\
                         'l.order_id, l.url, l.status_id, s.name as status, l.xls_file,l.csv_file,l.csv_zip_file,'\
-                        'o.vip, o.fields, o.limit_count, o.export_csv,'\
+                        'o.vip, o.fields, o.limit_count, o.export_csv, o.free, ifnull(u.ban,0) as ban, '\
                         'o.phone_anonym, o.only_new, o.save_tag, o.param_in_col, o.phone_dubli, o.ads_dubli, o.seller_dubli, o.local_priority, o.only_new_phone,'\
                         'ifnull(o.parse_by_date,"") as parse_by_date, o.get_seller_data, date(o.date) as order_date, o.work as order_work,'\
                         'DATE_ADD(stop_negative_balance_date, INTERVAL 24 hour) as negative_hours_left,'\
@@ -445,9 +474,9 @@ class Order():
                     ' FROM `log` l inner join `status` s on s.id=l.status_id '\
                     ' inner join `order` o on o.id=l.order_id '\
                     ' left join `users` u on o.user_id=u.id '\
-                    f' where o.id=%(id)s'
+                    f' where l.hash=%(hash)s'
                 
-            select_order = db.select_one(sql, {'id': self.id})
+            select_order = db.select_one(sql, {'hash': self.hash})
             if db.error:
                 current_app.logger.critical(f"[Order._get_data_in_db] Ошибка при запросе: {db.error}")
                 return None
@@ -458,9 +487,9 @@ class Order():
         with mysql() as db:
             sql = 'select comment, l.hash '\
                   'from order_comment t '\
-                  f'inner join log l on l.order_id=t.order_id and l.status_id=4 and l.order_id=%(id)s '
+                  f'inner join log l on l.order_id=t.order_id and l.status_id=4 and l.hash=%(hash)s '
                 
-            select_order_message = db.select_one(sql, {'id': self.id})
+            select_order_message = db.select_one(sql, {'hash': self.hash})
             if db.error:
                 current_app.logger.critical(f"[Order._get_order_message_in_db] Ошибка при запросе: {db.error}")
                 return None
@@ -477,12 +506,12 @@ class Order():
         Вернет: словарь данных
         """
             
-        if not self.id:
-            current_app.logger.critical(f"[Order.get_data] Не задан id заказа")
+        if not self.hash:
+            current_app.logger.critical(f"[Order.get_data] Не задан hash заказа")
             return None
         
         #********** получаем данные из БД **********
-        select_order = self._get_data_in_db()      
+        select_order = self._get_data_in_db()
         
         print(f'select_order={select_order}')
         return_data = dict()
@@ -590,6 +619,8 @@ class Order():
         queue_mess = ""
         return_data["queue_mess"] = queue_mess
         admin_panel = ''
+        if current_user.is_admin:
+            admin_panel = "Панель Админа"
         return_data["admin_panel"] = admin_panel
         return_data["comment_for_order"] = comment_for_order
         return_data["message_for_order"] = self._get_order_message_in_db()
@@ -622,22 +653,20 @@ class Order():
         return_data["progressbar_ads_text"] = progressbar_ads_text  
         return_data["progressbar_ads_coord"] = progressbar_ads_coord  
               
-        
-        return return_data        
-   
-    # сгенерировать токен jwt 
-    def get_order_token(self):
-        return jwt.encode({'id': self.id},
-                            current_app.config['SECRET_KEY'], 
-                            algorithm='HS256')
+        # возвращаем словарь
+        return return_data  
     
-    # проверка токета jwt
+    # проверка токета в базе
     # статический метод, что означает, что его можно вызывать непосредственно из класса
     @staticmethod
-    def get_id_by_token(token):
-        try:
-            id = int(jwt.decode(token, current_app.config['SECRET_KEY'],
-                            algorithms=['HS256'])['id'])
-        except:
-            return None 
-        return id
+    def get_id_by_hash(hash):
+        with mysql() as db:
+            sql = 'select order_id from log where hash=%(hash)s '
+            select_order_id = db.select_one(sql, {'hash': hash})
+            if db.error:
+                current_app.logger.critical(f"[Order.get_id_by_hash] Ошибка при запросе: {db.error}")
+                return None
+            if not select_order_id or 'order_id' not in select_order_id or not select_order_id['order_id']:
+                return None
+            return select_order_id['order_id']
+            

@@ -22,19 +22,10 @@
              <a href='{{ url_for("auth.login") }}'>Вход</a> / <a href='{{ url_for("auth.register") }}'>Регистрация</a>
         </div>
         {% endif %}
+                
 
-        {#}
-        {% if %}
-        <?php //30 руб. на счет и скачать еще 1000 объявлений бесплатно.
-            if ($session_login_id=='')
-            echo '<div class="alert alert-info" role="alert">
-                    Зарегистрируйтесь, чтобы получить больше объявлений
-                     <a href="/login'.$utm_hvost.'">Вход</a> / <a href="/reg'.$utm_hvost.'">Регистрация</a>
-                         </div>';
-        ?>{#}
         <div class="row free-form">
             <div class="col">
-               {#}<?php if (AVITO_ERROR==1) echo AVITO_ERROR_MSG;?>{#}
                 <form id="freeform" method="POST">
                 <fieldset id="FreeFields">
                     {{ free_form.csrf_token }}
@@ -93,4 +84,6 @@
             </div>
         </div>        
     </div>
+    
+    {% include '_modal_create_order.html' %}
 </section>

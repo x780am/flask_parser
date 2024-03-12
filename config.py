@@ -32,6 +32,8 @@ class Config:
     PRICE = os.environ.get('PRICE')
     # сколько дней хранить файлы
     HOW_MANY_DAYS_STORE_FILE = os.environ.get('HOW_MANY_DAYS_STORE_FILE')
+    
+    SALT =  os.environ.get('SALT')
        
     # количество элементов на странице
     USERS_PER_PAGE = 10

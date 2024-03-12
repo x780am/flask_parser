@@ -18,18 +18,41 @@
             </div>
             {% endif %}
             {% if order.comment_for_order %}
-            <div class="row" id ="div_mess_for_order"  >
+            <div class="row" id ="div_mess_for_order" >
                 <div class="col">
-                <div class="alert alert-warning" id ="mess_for_order" role="alert">
-                    {{ order.comment_for_order }}
-                </div></div>
+                    <div class="alert alert-warning" id ="mess_for_order" role="alert">
+                        {{ order.comment_for_order|safe }}                        
+                    </div>
+                </div>
             </div>
             {% endif %}
-            <!--<div class="row" id ="div_admin_panel"  >
+            {% if order.admin_panel %}            
+            <div class="row" id ="div_admin_panel"  >
                 <div class="col">
-                <div class="alert alert-info" id ="admin_panel" role="alert">
-                </div></div>
+                    <div class="alert alert-info" id ="admin_panel" role="alert">
+                        <div class="knopki" style="margin-bottom: 10px;">
+                            <button class="btn btn-outline-dark" style="width: 40px;height: 40px;" title="Остановить/запустить" {# onclick="order_stop(53821);"#}>
+                                <i class="fa fa-stop" aria-hidden="true"></i> 
+                            </button> 
+                            <button class="btn btn-outline-dark" style="width: 40px;height: 40px;" title="Рестарт" {# onclick="order_restart(53821);"#}>
+                                <i class="fas fa-sync"></i> 
+                            </button>  
+                            <button class="btn btn-outline-dark" style="width: 40px;height: 40px;" title="export" {# onclick="order_export(53821);"#}>
+                                <i class="fa fa-download" aria-hidden="true"></i> 
+                            </button> &nbsp;&nbsp;
+                            <button class="btn btn-outline-dark" style="width: 40px;height: 40px;" title="Платежи" {# onclick="show_user_pay(1, 'admin' ); "#}>
+                                <i class="far fa-money-bill-alt"></i>
+                            </button>
+                            <button class="btn btn-outline-dark" style="width: 40px;height: 40px;" title="Заказы" {# onclick="show_user_order(1, 'admin' );"#}>
+                                <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        {# {{ order.admin_panel|safe }} #}
+                    </div>
+                </div>
             </div>
+            {% endif %}
+            <!--
             <div class="row" id ="autoload_div"  >
                 <div class="col">
                 <div class="alert alert-info" id ="autoload_text" role="alert">

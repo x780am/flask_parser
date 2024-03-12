@@ -1,0 +1,40 @@
+<form id="payform" >    
+    <div class="mb-3">
+        <label class="form-label">Тип файла для выгрузки</label>
+        <select class="form-select" id="file_type">
+            <option value="1" selected>Файл Excel (.xlsx)</option>
+            <option value="2">Файлы Excel и csv (win-1251)</option>
+            <option value="3">Файлы Excel и csv (utf-8)</option>
+        </select>
+    </div>
+    <div class="mb-3" id="seller_dubli">
+        <div class="form-check">
+            <input class="form-check-input" name="seller_dubli_check" type="checkbox" value="" id="seller_dubli_check">
+            <label class="form-check-label" for="seller_dubli_check">
+                Только уникальные продавцы
+            </label>
+            <div>
+                <small class="form-text text-muted clear_fix">
+                    После скачивания всех данных в файл выгрузятся только строки с уникальными продавцами.
+                        Сумма заказа пересчитается и деньги будут возвращены на счет аккаунта.
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3" id="only_new">
+        <div class="form-check">
+            <input class="form-check-input" name="only_new_check" type="checkbox" value="" id="only_new_check">
+            <label class="form-check-label" for="only_new_check">
+                Только новые объявления
+            </label>            
+            <a class="underline" href="{{ url_for('help.block', active_block='only_new') }}" target="_blank"><img src="{{ url_for('main.static', filename='/img/help/help-icon.png') }}" width="16" height="16" alt="Что это?"></a>       
+            <div>
+                <small class="form-text text-muted clear_fix">
+                    В файл выгрузятся объявления, которых не было в предыдущих ваших заказах. Сумма заказа пересчитается и деньги будут возвращены на счет аккаунта.
+                    Укажите лимит объявлений, если хотите сократить объем поиска и цену.
+                </small>
+            </div>
+        </div>
+    </div>
+
+</form>

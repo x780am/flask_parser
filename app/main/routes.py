@@ -1,7 +1,7 @@
 import time
 from flask import g, render_template, redirect, jsonify, flash, url_for, request, current_app, send_file, Response, session
 from flask_login import current_user, login_required
-from app.main.forms import SubscribeForm, ContactForm, FreeForm
+from app.main.forms import SubscribeForm, ContactForm, FreeForm, CalcForm
 from app.main import bp
 from app.main.email import send_contact_data_to_admin, send_subscribe_data_to_admin
 from app.utils import admin_required
@@ -41,7 +41,19 @@ def rules():
 
 @bp.route('/parser')
 def parser():
-    return render_template("parser.html")
+    calc_form = CalcForm()
+    return render_template("parser.html", 
+                           calc_form=calc_form)
+    
+@bp.route('/calc_order', methods=['POST'])
+def calc_order():
+    calc_form = CalcForm()
+    if calc_form.validate():
+        time.sleep(5)
+        return 'ok'
+    else:
+        return jsonify(calc_form.errors), 400
+
 
 @bp.route('/test_logger')
 def test():
@@ -137,23 +149,22 @@ def contact():
 def ip():
     return g.ip_address
 
-@bp.route('/order/<token>', methods=['GET'])
-def order(token):
-    # order = Order(token=token).id
+@bp.route('/order/<hash>', methods=['GET'])
+def order(hash):
+    # order = Order(hash=hash).id
     # return str(order)
-    # order = Order(token=token).get_data()
+    # hash = Order(id=338139).hash
+    # return hash
+    order = Order(hash=hash).get_data()
     # order = Order(id=338130).get_data() # free=1
     # order = Order(id=338146).get_data() # с лимитом
     # order = Order(id=53821).get_data() # парсить по дату
-    order = Order(id=338139).get_data() # удалять дубли 
-    print(order)
+    # order = Order(id=338139).get_data() # удалять дубли 
+    # print(order)
     # order['status_id'] = 3
     status_work = Parser_data().get_status_work()
     return render_template("order.html", 
                            order=order,
                            status_work=status_work,
                            HOW_MANY_DAYS_STORE_FILE=current_app.config["HOW_MANY_DAYS_STORE_FILE"])
-    # token = Order(id=338145).get_order_token()
-    # return token
-    # order_data = Order(id=338145).get_data()
-    # return order_data
+    

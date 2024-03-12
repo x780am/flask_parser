@@ -30,3 +30,8 @@ class FreeForm(MyBaseForm):
     checkPD = BooleanField("Я даю соглаcие на обработку персональных данных", validators=[DataRequired()], default=True, render_kw ={'checked':''})
     submit = SubmitField("Скачать данные")
         
+class CalcForm(MyBaseForm):
+    url = StringField(label='Ссылки с доски объявлений (одна или несколько)', widget=TextArea(), validators=[DataRequired()], render_kw={"placeholder": ""}) 
+    local_priority = BooleanField("Сначала в выбранном городе/радиусе", default=True, render_kw ={'checked':''})
+    submit = SubmitField("Скачать данные")
+     

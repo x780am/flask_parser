@@ -1,8 +1,14 @@
 <nav class="navbar navbar-expand-md fixed-top"> 
   <div class="container">
-    <a class="navbar-brand" href="{{ url_for('main.index') }}">
-      <img src="{{ url_for('main.static', filename='img/favicon.ico') }}" alt="parser24" width="30" height="30" class="d-inline-block align-text-top">
-      PARSER24</a>
+        <a class="navbar-brand" style="display:inline-block; padding: 0 0;" href="{{ url_for('main.index') }}">
+            <div style="display:inline-block; vertical-align: top; margin: 0 0; margin-top: 7px;">
+              <img src="{{ url_for('main.static', filename='img/favicon.ico') }}" alt="parser24" width="40" height="40" {#}class="d-inline-block align-text-top"{#}>
+            </div>
+            <div class="col"  style="display:inline-block; margin: 0 0; text-align: center;">
+              <p style="display:inline-block; font-size: 0.8em; margin: 0 0; text-align: center;">PARSER24 </p>
+              <p style="font-size: 0.6em; margin: 0 0; text-align: center;">ex avi2-parser</p>
+            </div>
+        </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_menu" aria-controls="navbar_menu" aria-expanded="false" aria-label="Меню">
       <span class="navbar-toggler-icon"></span>
     </button>

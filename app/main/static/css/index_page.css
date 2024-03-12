@@ -206,11 +206,9 @@
 /*===================== block_work ===================*/
 #block_work{
 	background: rgb(246, 247, 249);
-
-
 }
 .work-head {
-	padding-bottom: 15x;
+	padding-bottom: 20px;
 }
 .icobox__icon-holder {
 

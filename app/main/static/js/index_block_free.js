@@ -2,6 +2,7 @@ const free_form = document.getElementById("freeform");
 const free_form_successMessage = document.getElementById("free_form_successmessage");
 const freeform_spiner_btn = document.getElementById("freeform_spiner");
 const freeform_submit_btn = document.getElementById("freeform_submit");
+
 const free_form_fields = {
     csrf_token: {
     input: free_form.querySelector("[id='csrf_token']"),
@@ -24,6 +25,12 @@ const FreeFields = free_form.querySelector("[id='FreeFields']");
 
 free_form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    var LoaderModal = new bootstrap.Modal(document.getElementById('LoaderModal'), {
+        keyboard: false 
+      })
+    LoaderModal.show();
+
     free_form_successMessage.style.display = 'none';
     for (var key of Object.keys(free_form_fields)) {
         free_form_fields[key].input.classList.remove('is-invalid');
@@ -62,5 +69,7 @@ free_form.addEventListener('submit', async (e) => {
         FreeFields.disabled = false;
         freeform_submit_btn.style.display = 'block';
         freeform_spiner_btn.style.display = 'none'; 
+
     }
+    LoaderModal.hide();
 });
